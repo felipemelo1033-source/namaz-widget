@@ -2,49 +2,126 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden; background-color: white; font-family: 'Montserrat', sans-serif; }
-        .container { width: 1920px; height: 1080px; position: relative; display: flex; flex-direction: column; align-items: center; }
-        .logo-top { width: 450px; margin-top: 30px; }
-        .title-red { color: #cc0000; font-size: 100px; font-weight: 800; margin: 10px 0 0 0; text-transform: uppercase; }
-        .title-blue { color: #72b1c4; font-family: 'Oregano', cursive; font-size: 120px; margin: -40px 0 30px 0; }
-        .custom-widget { background: #f9f9f9; border-radius: 30px; padding: 50px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 1300px; text-align: center; border: 2px solid #eee; }
-        #countdown { font-size: 140px; font-weight: 800; color: #cc0000; margin-bottom: 40px; font-variant-numeric: tabular-nums; }
-        .vakit-grid { display: flex; justify-content: space-between; gap: 15px; }
-        .vakit-item { flex: 1; padding: 20px 10px; background: white; border-radius: 15px; border: 1px solid #ddd; }
-        .vakit-item.active { border: 5px solid #cc0000; background: #fffcfc; transform: scale(1.05); }
-        .vakit-name { font-size: 28px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
-        .vakit-time { font-size: 45px; font-weight: 800; color: #333; }
-        .footer { position: absolute; bottom: 50px; width: 100%; text-align: center; color: #cc0000; font-weight: 800; font-size: 60px; }
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            min-height: 100vh; 
+            background-color: white; 
+            font-family: 'Montserrat', sans-serif; 
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+        }
 
-		/* MOBILE ANPASSUNG (FÜR SMARTPHONES) */
-        @media (max-width: 1000px) {
-            html, body { width: 100%; height: auto; overflow-y: auto; overflow-x: hidden; }
-            .container { width: 100%; height: auto; min-height: 100vh; padding-bottom: 50px; }
-            .logo-left, .logo-right { display: none; } /* Seitliche Logos am Handy weg */
-            .logo-top { width: 200px; margin-top: 20px; }
-            .title-red { font-size: 40px; margin-top: 10px; }
-            .title-blue { font-size: 50px; margin: -10px 0 20px 0; }
-            .custom-widget { width: 90%; padding: 20px; box-shadow: none; border-radius: 20px; }
-            #countdown { font-size: 70px; margin-bottom: 20px; }
-            .vakit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-            .vakit-item { padding: 15px 5px; }
-            .vakit-name { font-size: 18px; }
-            .vakit-time { font-size: 28px; }
-            .footer { position: relative; bottom: 0; margin-top: 30px; font-size: 25px; padding: 0 10px; }
+        .container { 
+            width: 100%; 
+            max-width: 1920px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
+        .logo-top { 
+            width: 450px; 
+            max-width: 70%; 
+            height: auto; 
+            margin-top: 20px; 
+        }
+
+        .title-red { 
+            color: #cc0000; 
+            font-size: clamp(40px, 7vw, 90px); 
+            font-weight: 800; 
+            margin: 20px 0 0 0; 
+            text-transform: uppercase; 
+            text-align: center;
+            width: 100%;
+        }
+
+        .title-blue { 
+            color: #72b1c4; 
+            font-family: 'Oregano', cursive; 
+            font-size: clamp(50px, 9vw, 110px); 
+            margin: -10px 0 30px 0; 
+            text-align: center;
+            width: 100%;
+        }
+
+        .custom-widget { 
+            background: #f9f9f9; 
+            border-radius: 30px; 
+            padding: clamp(20px, 5vw, 50px); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1); 
+            width: 95%; 
+            max-width: 1300px; 
+            text-align: center; 
+            border: 2px solid #eee; 
+            box-sizing: border-box;
+        }
+
+        #countdown { 
+            font-size: clamp(60px, 15vw, 150px); 
+            font-weight: 800; 
+            color: #cc0000; 
+            margin-bottom: 30px; 
+            font-variant-numeric: tabular-nums;
+        }
+
+        .vakit-grid { 
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 10px; 
+        }
+
+        .vakit-item { 
+            padding: 15px 5px; 
+            background: white; 
+            border-radius: 15px; 
+            border: 1px solid #ddd; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .vakit-item.active { 
+            border: 6px solid #cc0000; 
+            background: #fffcfc; 
+            transform: scale(1.05); 
+        }
+
+        .vakit-name { font-size: clamp(14px, 2vw, 24px); color: #666; text-transform: uppercase; margin-bottom: 5px; }
+        .vakit-time { font-size: clamp(18px, 3vw, 40px); font-weight: 800; color: #333; }
+
+        .footer { 
+            width: 100%; 
+            text-align: center; 
+            color: #cc0000; 
+            font-weight: 800; 
+            font-size: clamp(20px, 5vw, 55px); 
+            margin-top: 50px; 
+            padding-bottom: 30px;
+        }
+
+        /* Handy-Anpassung: 2 Spalten für die Gebetszeiten */
+        @media (max-width: 768px) {
+            .vakit-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .vakit-item { padding: 25px 10px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-		<img src="./logo_oben.svg" class="logo-top">
-
-		
+        <img src="logo_oben.svg" class="logo-top">
+        
         <h1 class="title-red">NAMAZ VAKİTLERİ</h1>
         <h2 class="title-blue">Reutlingen</h2>
-		
+        
         <div class="custom-widget">
             <div id="countdown">00:00:00</div>
             <div class="vakit-grid">
@@ -59,8 +136,8 @@
         <div class="footer">BİZ BÜYÜK BİR AİLEYİZ!</div>
     </div>
 
-<script>
-        // Daten aus deiner CSV-Tabelle (Diyanet Reutlingen 2026)
+    <script>
+        // Deine Daten (Hier beispielhaft - füge deine komplette Liste ein)
         const vakitler = {
             "01.01.2026": ["06:20", "08:08", "12:32", "14:25", "16:45", "18:20"],
             "02.01.2026": ["06:21", "08:08", "12:32", "14:26", "16:46", "18:21"],
@@ -152,98 +229,78 @@
             "29.03.2026": ["05:19", "07:01", "13:33", "17:02", "19:55", "21:23"],
             "30.03.2026": ["05:17", "06:59", "13:33", "17:03", "19:57", "21:25"],
             "31.03.2026": ["05:15", "06:57", "13:33", "17:04", "19:58", "21:27"]
+            // ... weitere Tage
         };
 
-        let countdownInterval;
+        function update() {
+            const now = new Date();
+            let d = String(now.getDate()).padStart(2, '0');
+            let m = String(now.getMonth() + 1).padStart(2, '0');
+            let y = now.getFullYear();
+            let dateStr = `${d}.${m}.${y}`;
 
-function update() {
-    const now = new Date();
-    let d = String(now.getDate()).padStart(2, '0');
-    let m = String(now.getMonth() + 1).padStart(2, '0');
-    let y = now.getFullYear();
-    let dateStr = `${d}.${m}.${y}`;
+            let times = vakitler[dateStr];
+            if (!times) return;
 
-    let times = vakitler[dateStr];
-    if (!times) {
-        document.getElementById('countdown').innerText = "Daten laden...";
-        return;
-    }
+            let next = null;
+            let nextIndex = -1;
 
-    let next = null;
-    let nextIndex = -1;
+            // Suche heutiges Gebet
+            for (let i = 0; i < 6; i++) {
+                const [h, min] = times[i].split(':').map(Number);
+                const pDate = new Date(now);
+                pDate.setHours(h, min, 0, 0);
 
-    // 1. Suche in den heutigen Zeiten
-    for (let i = 0; i < 6; i++) {
-        const [h, min] = times[i].split(':').map(Number);
-        const pDate = new Date(now);
-        pDate.setHours(h, min, 0, 0);
+                if (!next && pDate > now) {
+                    next = pDate;
+                    nextIndex = i;
+                }
+            }
 
-        if (!next && pDate > now) {
-            next = pDate;
-            nextIndex = i;
+            // Wenn nach Yatsı -> Morgen Imsak
+            if (!next) {
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tStr = `${String(tomorrow.getDate()).padStart(2, '0')}.${String(tomorrow.getMonth() + 1).padStart(2, '0')}.${tomorrow.getFullYear()}`;
+                if (vakitler[tStr]) {
+                    times = vakitler[tStr];
+                    const [h, min] = times[0].split(':').map(Number);
+                    next = new Date(tomorrow);
+                    next.setHours(h, min, 0, 0);
+                    nextIndex = 0;
+                }
+            }
+
+            // Boxen füllen
+            for (let i = 0; i < 6; i++) {
+                document.getElementById('t-' + i).innerText = times[i];
+                document.getElementById('box-' + i).classList.remove('active');
+            }
+            if (nextIndex !== -1) {
+                document.getElementById('box-' + nextIndex).classList.add('active');
+                startCountdown(next);
+            }
         }
-    }
 
-    // 2. WICHTIG: Wenn nach Yatsı nichts gefunden wurde -> ALLES auf morgen umstellen
-    if (!next) {
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        
-        const td = String(tomorrow.getDate()).padStart(2, '0');
-        const tm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const ty = tomorrow.getFullYear();
-        const tomorrowStr = `${td}.${tm}.${ty}`;
-
-        const tomorrowTimes = vakitler[tomorrowStr];
-        if (tomorrowTimes) {
-            times = tomorrowTimes; // Wechselt die Anzeige der Boxen auf morgen
-            const [h, m_imsak] = times[0].split(':').map(Number);
-            next = new Date(tomorrow);
-            next.setHours(h, m_imsak, 0, 0);
-            nextIndex = 0; // Markiert Imsak für morgen
-        }
-    }
-
-    // 3. Boxen füllen und Highlight setzen
-    // 'times' ist jetzt entweder von heute oder (nach Yatsı) schon von morgen
-    for(let i = 0; i < 6; i++) {
-        document.getElementById('t-' + i).innerText = times[i];
-        document.getElementById('box-' + i).classList.remove('active');
-    }
-
-    if (nextIndex !== -1) {
-        document.getElementById('box-' + nextIndex).classList.add('active');
-        startCountdown(next);
-    }
-}
-
+        let interval;
         function startCountdown(target) {
-            if (countdownInterval) clearInterval(countdownInterval);
-            
-            countdownInterval = setInterval(() => {
-                const now = new Date();
-                const diff = target - now;
-
+            if (interval) clearInterval(interval);
+            interval = setInterval(() => {
+                const diff = target - new Date();
                 if (diff <= 0) {
-                    clearInterval(countdownInterval);
-                    update(); // Springt zur nächsten Zeit/nächsten Tag
+                    clearInterval(interval);
+                    update();
                     return;
                 }
-
                 const h = Math.floor(diff / 3600000);
                 const m = Math.floor((diff % 3600000) / 60000);
                 const s = Math.floor((diff % 60000) / 1000);
-
                 document.getElementById('countdown').innerText = 
                     `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
             }, 1000);
         }
 
-        // Initialer Start
         update();
     </script>
 </body>
-
 </html>
-
-
