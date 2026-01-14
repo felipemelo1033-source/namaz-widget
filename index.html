@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden; background-color: white; font-family: 'Montserrat', sans-serif; }
@@ -19,6 +20,22 @@
         .vakit-name { font-size: 28px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
         .vakit-time { font-size: 45px; font-weight: 800; color: #333; }
         .footer { position: absolute; bottom: 50px; width: 100%; text-align: center; color: #cc0000; font-weight: 800; font-size: 60px; }
+
+		/* MOBILE ANPASSUNG (FÜR SMARTPHONES) */
+        @media (max-width: 1000px) {
+            html, body { width: 100%; height: auto; overflow-y: auto; overflow-x: hidden; }
+            .container { width: 100%; height: auto; min-height: 100vh; padding-bottom: 50px; }
+            .logo-left, .logo-right { display: none; } /* Seitliche Logos am Handy weg */
+            .logo-top { width: 200px; margin-top: 20px; }
+            .title-red { font-size: 40px; margin-top: 10px; }
+            .title-blue { font-size: 50px; margin: -10px 0 20px 0; }
+            .custom-widget { width: 90%; padding: 20px; box-shadow: none; border-radius: 20px; }
+            #countdown { font-size: 70px; margin-bottom: 20px; }
+            .vakit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .vakit-item { padding: 15px 5px; }
+            .vakit-name { font-size: 18px; }
+            .vakit-time { font-size: 28px; }
+            .footer { position: relative; bottom: 0; margin-top: 30px; font-size: 25px; padding: 0 10px; }
 
     </style>
 </head>
@@ -229,4 +246,5 @@ function update() {
         update();
     </script>
 </body>
+
 </html>
