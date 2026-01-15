@@ -3,61 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         html, body { 
-            margin: 0; padding: 0; width: 100%; min-height: 100vh; 
-            background-color: white; font-family: 'Montserrat', sans-serif; 
-            display: flex; justify-content: center; overflow-x: hidden;
-        }
-        .container { 
-            width: 100%; max-width: 1920px; display: flex; 
-            flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box;
-        }
-        .logo-top { width: 450px; max-width: 70%; height: auto; margin-top: 20px; }
-        
-        .title-red { 
-            color: #cc0000; font-size: clamp(40px, 7vw, 90px); font-weight: 800; 
-            margin: 20px 0 10px 0; text-transform: uppercase; text-align: center;
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            min-height: 100vh; 
+            background-color: white; 
+            font-family: 'Montserrat', sans-serif; 
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
         }
 
-        /* Dropdown Styling */
-        .city-picker { margin-bottom: 10px; z-index: 100; }
+        .container { 
+            width: 100%; 
+            max-width: 1920px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .logo-top { 
+            width: 450px; 
+            max-width: 70%; 
+            height: auto; 
+            margin-top: 20px; 
+        }
+
+        .title-red { 
+            color: #cc0000; 
+            font-size: clamp(40px, 7vw, 90px); 
+            font-weight: 800; 
+            margin: 20px 0 10px 0; 
+            text-transform: uppercase; 
+            text-align: center;
+            width: 100%;
+        }
+
+        .city-picker { 
+            margin-bottom: 5px; 
+            z-index: 100; 
+        }
+
         #city-select {
-            padding: 8px 20px; font-size: 18px; border-radius: 10px; 
-            border: 1px solid #ddd; font-family: 'Montserrat'; background: #f9f9f9; color: #666;
+            padding: 5px 15px; 
+            font-size: 18px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            font-family: 'Montserrat', sans-serif; 
+            background: #f9f9f9; 
+            color: #666;
+            cursor: pointer;
         }
 
         .title-blue { 
-            color: #72b1c4; font-family: 'Pacifico', cursive; 
-            font-size: clamp(50px, 9vw, 110px); margin: 0 0 5px 0; text-align: center;
+            color: #72b1c4; 
+            font-family: 'Oregano', cursive; 
+            font-size: clamp(50px, 9vw, 110px); 
+            margin: 0 0 10px 0; 
+            text-align: center;
+            width: 100%;
         }
 
         #hicri-tarih {
-            font-size: clamp(20px, 4vw, 30px); color: #888; margin-bottom: 25px; font-weight: 800;
+            font-size: clamp(20px, 4vw, 30px);
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 800;
         }
 
         .custom-widget { 
-            background: #f9f9f9; border-radius: 30px; padding: clamp(20px, 5vw, 50px); 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 95%; max-width: 1300px; 
-            text-align: center; border: 2px solid #eee; box-sizing: border-box;
+            background: #f9f9f9; 
+            border-radius: 30px; 
+            padding: clamp(20px, 5vw, 50px); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1); 
+            width: 95%; 
+            max-width: 1300px; 
+            text-align: center; 
+            border: 2px solid #eee; 
+            box-sizing: border-box;
         }
 
         #countdown { 
-            font-size: clamp(60px, 15vw, 150px); font-weight: 800; 
-            color: #cc0000; margin-bottom: 30px; font-variant-numeric: tabular-nums;
+            font-size: clamp(60px, 15vw, 150px); 
+            font-weight: 800; 
+            color: #cc0000; 
+            margin-bottom: 30px; 
+            font-variant-numeric: tabular-nums;
         }
 
-        .vakit-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
-        .vakit-item { 
-            padding: 15px 5px; background: white; border-radius: 15px; 
-            border: 1px solid #ddd; display: flex; flex-direction: column;
+        .vakit-grid { 
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 10px; 
         }
-        .vakit-item.active { border: 6px solid #cc0000; background: #fffcfc; transform: scale(1.05); }
+
+        .vakit-item { 
+            padding: 15px 5px; 
+            background: white; 
+            border-radius: 15px; 
+            border: 1px solid #ddd; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .vakit-item.active { 
+            border: 6px solid #cc0000; 
+            background: #fffcfc; 
+            transform: scale(1.05); 
+        }
+
         .vakit-name { font-size: clamp(14px, 2vw, 24px); color: #666; text-transform: uppercase; margin-bottom: 5px; }
         .vakit-time { font-size: clamp(18px, 3vw, 40px); font-weight: 800; color: #333; }
 
-        /* Ayet Box */
+		/* Ayet Box */
         #ayet-container {
             display: none; margin-top: 40px; padding: 25px; background: #fdfdfd; 
             border: 1px solid #eee; border-left: 6px solid #cc0000; border-radius: 15px; 
@@ -66,32 +130,37 @@
         .ayet-label { color: #cc0000; font-weight: 800; font-size: 14px; text-transform: uppercase; margin-bottom: 10px; }
         #ayet-text { font-style: italic; font-size: clamp(16px, 2.5vw, 22px); color: #333; line-height: 1.6; }
         #ayet-quelle { text-align: right; color: #999; font-weight: bold; margin-top: 10px; font-size: 14px; }
-
+		
         .footer { 
-            color: #cc0000; font-weight: 800; font-size: clamp(20px, 5vw, 55px); 
-            margin: 50px 0; text-align: center;
+            width: 100%; 
+            text-align: center; 
+            color: #cc0000; 
+            font-weight: 800; 
+            font-size: clamp(20px, 5vw, 55px); 
+            margin-top: 50px; 
+            padding-bottom: 30px;
         }
 
         @media (max-width: 768px) {
             .vakit-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .vakit-item { padding: 25px 10px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="logo_oben.svg" class="logo-top">
-        <h1 class="title-red">NAMAZ VAKİTLERİ</h1>
-
-        <div class="city-picker">
+	    <div class="city-picker">
             <select id="city-select" onchange="update()">
                 <option value="reutlingen">Reutlingen</option>
                 <option value="filderstadt">Filderstadt</option>
                 <option value="nuertingen">Nürtingen</option>
             </select>
-        </div>
-
-        <h2 class="title-blue" id="city-title">--</h2>
-        <div id="hicri-tarih">--</div>
+        </div>   
+        <img src="logo_oben.svg" class="logo-top">
+        <h1 class="title-red">NAMAZ VAKİTLERİ</h1>
+        <h2 class="title-blue" id="city-title">Reutlingen</h2>
+        
+        <div id="hicri-tarih">--:--</div>
 
         <div class="custom-widget">
             <div id="countdown">00:00:00</div>
@@ -105,12 +174,12 @@
             </div>
         </div>
 
-        <div id="ayet-container">
-            <div class="ayet-label">Günün Ayeti</div>
-            <div id="ayet-text"></div>
-            <div id="ayet-quelle"></div>
-        </div>
-
+		<div id="ayet-container" style="display:none; margin-top: 30px; padding: 25px; background: #fdfdfd; border: 1px solid #eee; border-left: 5px solid #cc0000; border-radius: 15px; max-width: 1200px; width: 90%; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+    		<div style="color: #cc0000; font-weight: 800; font-size: 14px; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px;">Günün Ayeti</div>
+    		<div id="ayet-text" style="font-family: 'Montserrat'; font-style: italic; font-size: clamp(16px, 2.5vw, 22px); color: #333; line-height: 1.6; margin-bottom: 10px;"></div>
+    		<div id="ayet-quelle" style="text-align: right; color: #888; font-weight: bold; font-size: 14px;"></div>
+		</div>		
+		
         <div class="footer">BİZ BÜYÜK BİR AİLEYİZ!</div>
     </div>
 
@@ -118,69 +187,91 @@
         let interval;
 
         async function update() {
-            const citySelect = document.getElementById('city-select');
-            
-            // 1. Stadt-Logik (URL -> Speicher -> Default)
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlCity = urlParams.get('city');
-            if (!window.initialLoadDone) {
-                if (urlCity) citySelect.value = urlCity;
-                else if (localStorage.getItem('userCity')) citySelect.value = localStorage.getItem('userCity');
-                window.initialLoadDone = true;
-            }
-            const city = citySelect.value;
-            localStorage.setItem('userCity', city);
+           const citySelect = document.getElementById('city-select');
+    
+    		// URL prüfen: Steht da z.B. ?city=nuertingen ?
+    		const urlParams = new URLSearchParams(window.location.search);
+    		const urlCity = urlParams.get('city');
+
+   			if (!window.initialLoadDone) {
+        			if (urlCity) {
+            			// Wenn in der URL eine Stadt steht, nimm diese
+            			citySelect.value = urlCity;
+        			} else {
+            			// Sonst schau im Speicher (LocalStorage) nach
+            			const savedCity = localStorage.getItem('userCity');
+            			if (savedCity) citySelect.value = savedCity;
+        			}
+        			window.initialLoadDone = true;
+    		}
+			
+            const selectedCity = citySelect.value;
+            localStorage.setItem('userCity', selectedCity);
+
+            // Titel im UI anpassen
             document.getElementById('city-title').innerText = citySelect.options[citySelect.selectedIndex].text;
 
             try {
-                // 2. Daten laden
-                const [cityRes, ayetRes] = await Promise.all([
-                    fetch(`./data/${city}.json`),
-                    fetch(`./data/ayetler.json`)
-                ]);
-                const cityData = await cityRes.json();
-                const ayetData = await ayetRes.json();
+                // Lädt die JSON-Datei aus dem Unterordner /data/
+                const response = await fetch(`./data/${selectedCity}.json`);
+                if (!response.ok) throw new Error("JSON konnte nicht geladen werden");
+                const allData = await response.json();
 
                 const now = new Date();
-                const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
+                const d = String(now.getDate()).padStart(2, '0');
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const y = now.getFullYear();
+                const dateStr = `${d}.${m}.${y}`;
 
-                // 3. Zeiten & Hicri
-                const today = cityData[dateStr];
-                if (today) {
-                    document.getElementById('hicri-tarih').innerText = today.hicri;
-                    renderTimes(today.vakitler, cityData, now);
+                const todayData = allData[dateStr];
+                if (!todayData) {
+                    document.getElementById('countdown').innerText = "Veri Yok";
+                    return;
                 }
 
-                // 4. Ayet
-                const ayet = ayetData[dateStr];
-                if (ayet) {
-                    document.getElementById('ayet-text').innerText = ayet.text;
-                    document.getElementById('ayet-quelle').innerText = "— " + ayet.quelle;
-                    document.getElementById('ayet-container').style.display = 'block';
-                }
-            } catch (err) { console.error("Yükleme hatası:", err); }
-        }
+                // Hicri Tarih und Vakitler setzen
+                document.getElementById('hicri-tarih').innerText = todayData.hicri;
+                const times = todayData.vakitler;
 
-        function renderTimes(times, allData, now) {
-            let next = null; let nextIndex = -1;
-            for (let i = 0; i < 6; i++) {
-                const [h, m] = times[i].split(':').map(Number);
-                const pDate = new Date(now); pDate.setHours(h, m, 0, 0);
-                if (!next && pDate > now) { next = pDate; nextIndex = i; }
-                document.getElementById('t-' + i).innerText = times[i];
-                document.getElementById('box-' + i).classList.remove('active');
-            }
-            if (!next) { // Morgen Imsak
-                const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1);
-                const tStr = `${String(tomorrow.getDate()).padStart(2, '0')}.${String(tomorrow.getMonth() + 1).padStart(2, '0')}.${tomorrow.getFullYear()}`;
-                if (allData[tStr]) {
-                    const [h, m] = allData[tStr].vakitler[0].split(':').map(Number);
-                    next = new Date(tomorrow); next.setHours(h, m, 0, 0); nextIndex = 0;
+                let next = null;
+                let nextIndex = -1;
+
+                // Nächstes Gebet heute suchen
+                for (let i = 0; i < 6; i++) {
+                    const [h, min] = times[i].split(':').map(Number);
+                    const pDate = new Date(now);
+                    pDate.setHours(h, min, 0, 0);
+
+                    if (!next && pDate > now) {
+                        next = pDate;
+                        nextIndex = i;
+                    }
+                    document.getElementById('t-' + i).innerText = times[i];
+                    document.getElementById('box-' + i).classList.remove('active');
                 }
-            }
-            if (nextIndex !== -1) {
-                document.getElementById('box-' + nextIndex).classList.add('active');
-                startCountdown(next);
+
+                // Falls kein Gebet mehr heute -> Imsak morgen
+                if (!next) {
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    const tStr = `${String(tomorrow.getDate()).padStart(2, '0')}.${String(tomorrow.getMonth() + 1).padStart(2, '0')}.${tomorrow.getFullYear()}`;
+                    if (allData[tStr]) {
+                        const tomorrowTimes = allData[tStr].vakitler;
+                        const [h, min] = tomorrowTimes[0].split(':').map(Number);
+                        next = new Date(tomorrow);
+                        next.setHours(h, min, 0, 0);
+                        nextIndex = 0;
+                    }
+                }
+
+                if (nextIndex !== -1) {
+                    document.getElementById('box-' + nextIndex).classList.add('active');
+                    startCountdown(next);
+                }
+
+            } catch (err) {
+                console.error("Hata:", err);
+                document.getElementById('countdown').innerText = "Hata";
             }
         }
 
@@ -188,7 +279,11 @@
             if (interval) clearInterval(interval);
             interval = setInterval(() => {
                 const diff = target - new Date();
-                if (diff <= 0) { clearInterval(interval); update(); return; }
+                if (diff <= 0) {
+                    clearInterval(interval);
+                    update();
+                    return;
+                }
                 const h = Math.floor(diff / 3600000);
                 const m = Math.floor((diff % 3600000) / 60000);
                 const s = Math.floor((diff % 60000) / 1000);
@@ -196,7 +291,10 @@
                     `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
             }, 1000);
         }
+
         update();
     </script>
 </body>
 </html>
+
+
