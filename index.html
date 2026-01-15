@@ -75,7 +75,7 @@
 
         /* --- AYET BOX STYLING --- */
         #ayet-container {
-            display: none; margin-top: 10px; text-align: left;
+            display: none; margin-top: 10px; text-align: center;
         }
         .ayet-label-box {
             color: #cc0000; font-weight: 800; font-size: 14px; text-transform: uppercase;
@@ -85,13 +85,15 @@
             font-family: 'Montserrat', sans-serif; font-style: italic; font-size: 22px; 
             color: #333; line-height: 1.4; word-wrap: break-word;
         }
-        #ayet-quelle { text-align: right; color: #888; font-weight: bold; font-size: 16px; }
+        #ayet-quelle { 
+            text-align: right; color: #888; font-weight: bold; font-size: 14px; 
+        }
 
         /* --- GROSSE BILDSCHIRME (TV / YODECK) --- */
         /* Diese Regeln gelten nur auf Monitoren mit mehr als 1200px Breite */
         @media screen and (min-width: 1200px) {
-            #ayet-text { font-size: 55px; line-height: 1.2; }
-            #ayet-quelle { font-size: 32px; }
+            #ayet-text { font-size: 45px; line-height: 1.2; }
+            #ayet-quelle { font-size: 25px; }
             .ayet-label-box { font-size: 22px; }
             .custom-widget { padding: 20px; }
             .container { justify-content: flex-start; gap: 10px; }
@@ -279,6 +281,7 @@
     </script>
 </body>
 </html>
+
 
 
 
