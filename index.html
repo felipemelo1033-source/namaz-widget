@@ -18,6 +18,13 @@
             flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box;
         }
 
+        @media (max-width: 768px) {
+            .container {
+                height: auto; /* Erlaubt der Seite am Handy zu wachsen */
+                min-height: 100vh;
+                }
+        }
+
         /* --- LOGO & TITEL --- */
         .logo-top { width: 450px; max-width: 60%; height: auto; margin-top: 10px; }
 
@@ -100,8 +107,21 @@
         }
 
         .footer { 
-            width: 100%; text-align: center; color: #cc0000; font-weight: 800; 
-            font-size: clamp(18px, 4vw, 25px); margin-top: auto; padding-bottom: 20px;
+            width: 100%; 
+            text-align: center; 
+            color: #cc0000; 
+            font-weight: 800; 
+            font-size: clamp(18px, 4vw, 25px); 
+            margin-top: 40px; /* Erhöht den festen Mindestabstand nach oben */
+            padding-bottom: 20px;
+            flex-shrink: 0; /* Verhindert, dass der Footer zusammengedrückt wird */
+        }
+
+        /* Speziell für Mobile: Noch etwas mehr Platz schaffen */
+        @media (max-width: 768px) {
+            #ayet-container {
+                margin-bottom: 30px; /* Drückt den Footer am Handy weiter nach unten */
+            }
         }
 
         /* Mobile Anpassung: Gebetszeiten untereinander (2er Spalten) */
@@ -281,6 +301,7 @@
     </script>
 </body>
 </html>
+
 
 
 
