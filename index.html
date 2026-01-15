@@ -211,6 +211,28 @@
             // Titel im UI anpassen
             document.getElementById('city-title').innerText = citySelect.options[citySelect.selectedIndex].text;
 
+			try {
+   				 // Hier wird die Datei geladen!
+    			const ayetRes = await fetch('./data/ayetler.json');
+    			const ayetData = await ayetRes.json();
+
+    			const now = new Date();
+    			const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
+
+    			// JETZT folgt dein Block:
+    			const ayet = ayetData[dateStr];
+    			if (ayet) {
+       				document.getElementById('ayet-text').innerText = ayet.text;
+        			document.getElementById('ayet-quelle').innerText = "— " + ayet.quelle;
+        			document.getElementById('ayet-container').style.display = 'block';
+    			} else {
+       				document.getElementById('ayet-container').style.display = 'none';
+    			}
+			} catch (e) {
+    			console.error("Ayetler konnte nicht geladen werden", e);
+			}
+
+			
             try {
                 // Lädt die JSON-Datei aus dem Unterordner /data/
                 const response = await fetch(`./data/${selectedCity}.json`);
@@ -296,5 +318,6 @@
     </script>
 </body>
 </html>
+
 
 
