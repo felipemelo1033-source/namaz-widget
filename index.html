@@ -193,14 +193,16 @@
     
     		// URL prüfen: Steht da z.B. ?city=nuertingen ?
     		const urlParams = new URLSearchParams(window.location.search);
+			
+			// Menü ausblenden, wenn ?admin in der URL vorkommt
 			if (urlParams.has('admin')) {
         		pickerContainer.style.display = 'none';
     		}
-    		const urlCity = urlParams.get('city');
 
    			if (!window.initialLoadDone) {
+					const urlCity = urlParams.get('city');
+				    	// Wenn in der URL eine Stadt steht, nimm diese
         			if (urlCity) {
-            			// Wenn in der URL eine Stadt steht, nimm diese
             			citySelect.value = urlCity;
         			} else {
             			// Sonst schau im Speicher (LocalStorage) nach
@@ -323,6 +325,7 @@
     </script>
 </body>
 </html>
+
 
 
 
