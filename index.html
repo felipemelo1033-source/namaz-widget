@@ -174,11 +174,15 @@
             </div>
         </div>
 
-		<div id="ayet-container" style="display:none; margin-top: 30px; padding: 25px; background: #fdfdfd; border: 1px solid #eee; border-left: 5px solid #cc0000; border-radius: 15px; max-width: 1200px; width: 90%; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-    		<div style="color: #cc0000; font-weight: 800; font-size: 14px; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px;">Günün Ayeti</div>
-    		<div id="ayet-text" style="font-family: 'Montserrat'; font-style: italic; font-size: clamp(16px, 2.5vw, 22px); color: #333; line-height: 1.6; margin-bottom: 10px;"></div>
-    		<div id="ayet-quelle" style="text-align: right; color: #888; font-weight: bold; font-size: 14px;"></div>
-		</div>		
+			<div id="ayet-container" class="custom-widget" style="display:none; margin-top: 40px; text-align: left;">
+    			<div style="color: #cc0000; font-weight: 800; font-size: 14px; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+        Günün Ayeti
+    		</div>
+   				 <div id="ayet-text" style="font-family: 'Montserrat'; font-style: italic; font-size: clamp(16px, 2.5vw, 22px); color: #333; line-height: 1.6; margin-bottom: 15px;">
+        	</div>
+    			<div id="ayet-quelle" style="text-align: right; color: #888; font-weight: bold; font-size: 16px;">
+        	</div>
+		</div>	
 		
         <div class="footer">BİZ BÜYÜK BİR AİLEYİZ!</div>
     </div>
@@ -229,7 +233,7 @@
        				document.getElementById('ayet-container').style.display = 'none';
     			}
 			} catch (e) {
-    			console.error("Ayetler konnte nicht geladen werden", e);
+    			console.error("Ayetler yüklenemedi", e);
 			}
 
 			
@@ -318,6 +322,7 @@
     </script>
 </body>
 </html>
+
 
 
 
