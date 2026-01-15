@@ -170,14 +170,24 @@
         let interval;
 
         async function update() {
-            const citySelect = document.getElementById('city-select');
-            
-            // LocalStorage: Merkt sich die letzte Stadt
-            const savedCity = localStorage.getItem('userCity');
-            if (!window.initialLoadDone && savedCity) {
-                citySelect.value = savedCity;
-                window.initialLoadDone = true;
-            }
+           const citySelect = document.getElementById('city-select');
+    
+    		// URL prüfen: Steht da z.B. ?city=nuertingen ?
+    		const urlParams = new URLSearchParams(window.location.search);
+    		const urlCity = urlParams.get('city');
+
+   			if (!window.initialLoadDone) {
+        			if (urlCity) {
+            			// Wenn in der URL eine Stadt steht, nimm diese
+            			citySelect.value = urlCity;
+        			} else {
+            			// Sonst schau im Speicher (LocalStorage) nach
+            			const savedCity = localStorage.getItem('userCity');
+            			if (savedCity) citySelect.value = savedCity;
+        			}
+        			window.initialLoadDone = true;
+    		}
+			
             const selectedCity = citySelect.value;
             localStorage.setItem('userCity', selectedCity);
 
@@ -269,3 +279,4 @@
     </script>
 </body>
 </html>
+
