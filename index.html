@@ -44,7 +44,8 @@
             width: 100%;
         }
 
-        .city-picker { 
+        .city-picker {
+			display: block; /* Standardmäßig sichtbar */
             margin-bottom: 5px; 
             z-index: 100; 
         }
@@ -187,10 +188,14 @@
         let interval;
 
         async function update() {
-           const citySelect = document.getElementById('city-select');
+           	const citySelect = document.getElementById('city-select');
+			const pickerContainer = document.querySelector('.city-picker');
     
     		// URL prüfen: Steht da z.B. ?city=nuertingen ?
     		const urlParams = new URLSearchParams(window.location.search);
+			if (urlParams.has('admin')) {
+        		pickerContainer.style.display = 'none';
+    		}
     		const urlCity = urlParams.get('city');
 
    			if (!window.initialLoadDone) {
@@ -318,6 +323,7 @@
     </script>
 </body>
 </html>
+
 
 
 
