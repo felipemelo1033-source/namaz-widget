@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namaz Vakitleri Widget</title>
+    <title>ATF Namaz Vaktileri</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=Oregano&family=Pacifico&display=swap" rel="stylesheet">
     
     <style>
-        /* --- 1. GENEL SAYFA YAPISI --- */
+        /* --- 1. GRUNDLAYOUT --- */
         html, body { 
             margin: 0; padding: 0; width: 100%; min-height: 100vh; 
             background-color: white; font-family: 'Montserrat', sans-serif; 
@@ -22,12 +22,14 @@
 
         @media (max-width: 768px) { .container { height: auto; min-height: 100vh; } }
 
-        /* --- 2. LOGO VE BAŞLIKLAR --- */
+        /* --- 2. LOGO UND TITEL --- */
         .logo-top { width: 450px; max-width: 60%; height: auto; margin-top: 10px; }
 
         .title-red { 
-            color: #cc0000; font-size: clamp(27px, 5.5vw, 77px); font-weight: 800; 
-            margin: 10px 0 5px 0; text-transform: uppercase; text-align: center; 
+            color: #cc0000; 
+            font-size: clamp(35px, 6vw, 65px); 
+            font-weight: 800; margin: 10px 0 5px 0; 
+            text-transform: uppercase; text-align: center; 
         }
 
         .title-blue { 
@@ -37,22 +39,20 @@
 
         #hicri-tarih { 
             font-size: clamp(18px, 4vw, 28px); color: #666; 
-            margin-bottom: 15px; font-weight: 800; 
+            margin-bottom: 5px; font-weight: 800; 
         }
 
-        /* --- 3. SEÇİM MENÜLERİ (CITY PICKER) --- */
+        /* --- 3. MENÜS (CITY PICKER) --- */
         .city-picker { 
             display: flex; flex-wrap: wrap; justify-content: center; 
             gap: 10px; margin-bottom: 15px; z-index: 100; width: 100%; 
         }
 
-        /* Menülerin genişliği burada eşitlenmiştir */
         #city-select, #state-select { 
             padding: 10px 15px; font-size: 18px; border-radius: 8px; 
             border: 1px solid #ddd; font-family: 'Montserrat', sans-serif; 
             background: #f9f9f9; color: #666; cursor: pointer;
-            width: 250px; /* EŞİT GENİŞLİK */
-            box-sizing: border-box;
+            width: 250px; box-sizing: border-box;
         }
 
         @media (max-width: 768px) {
@@ -60,7 +60,7 @@
             #city-select, #state-select { width: 90%; max-width: 300px; }
         }
 
-        /* --- 4. ANA WIDGET VE GERİ SAYIM --- */
+        /* --- 4. HAUPT WIDGET (ZEITEN & COUNTDOWN) --- */
         .custom-widget { 
             background: #f9f9f9; border-radius: 30px; padding: 25px; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 95%; max-width: 1300px; 
@@ -77,64 +77,39 @@
             gap: 10px; color: #cc0000; margin-bottom: 20px; 
         }
 
-        .countdown-block { 
-            display: flex; flex-direction: column; align-items: center; 
-            width: clamp(70px, 12vw, 130px); 
-        }
+        .countdown-block { display: flex; flex-direction: column; align-items: center; width: clamp(70px, 12vw, 130px); }
+        .countdown-number { font-size: clamp(40px, 10vw, 110px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+        .countdown-label { font-size: clamp(10px, 2vw, 14px); text-transform: uppercase; margin-top: 5px; font-weight: 800; }
+        .countdown-separator { font-size: clamp(40px, 10vw, 110px); font-weight: 800; line-height: 1; }
 
-        .countdown-number { 
-            font-size: clamp(40px, 10vw, 110px); font-weight: 800; 
-            line-height: 1; font-variant-numeric: tabular-nums; 
-        }
+        .vakit-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; width: 100%; }
+        .vakit-item { padding: 15px 5px; background: white; border-radius: 15px; border: 1px solid #ddd; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; }
+        .vakit-item.active { border: 6px solid #cc0000; background: #fffcfc; transform: scale(1.05); }
+        .vakit-name { font-size: clamp(12px, 2vw, 22px); color: #666; text-transform: uppercase; margin-bottom: 5px; }
+        .vakit-time { font-size: clamp(16px, 3vw, 38px); font-weight: 800; color: #333; }
 
-        .countdown-label { 
-            font-size: clamp(10px, 2vw, 14px); text-transform: uppercase; 
-            margin-top: 5px; font-weight: 800; 
-        }
-
-        .countdown-separator { 
-            font-size: clamp(40px, 10vw, 110px); font-weight: 800; line-height: 1; 
-        }
-
-        /* --- 5. VAKİT TABLOSU (GRID) --- */
-        .vakit-grid { 
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; width: 100%; 
-        }
-
-        .vakit-item { 
-            padding: 15px 5px; background: white; border-radius: 15px; 
-            border: 1px solid #ddd; display: flex; flex-direction: column; 
-            justify-content: center; box-sizing: border-box; 
-        }
-
-        .vakit-item.active { 
-            border: 6px solid #cc0000; background: #fffcfc; transform: scale(1.05); 
-        }
-
-        .vakit-name { 
-            font-size: clamp(12px, 2vw, 22px); color: #666; 
-            text-transform: uppercase; margin-bottom: 5px; 
-        }
-
-        .vakit-time { 
-            font-size: clamp(16px, 3vw, 38px); font-weight: 800; color: #333; 
-        }
-
-        /* --- 6. AYET / HADİS KUTUSU --- */
+        /* --- 5. AYET / HADIS SEKTION --- */
         #ayet-container { display: none; margin-top: 20px; text-align: center; }
-
         .ayet-label-box { 
             color: #cc0000; font-weight: 800; font-size: 14px; 
             text-transform: uppercase; letter-spacing: 1px; 
-            border-bottom: 1px solid #eee; padding-bottom: 5px; 
+            border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;
         }
 
         #ayet-text { 
             font-family: 'Montserrat', sans-serif; font-style: italic; 
-            font-size: 18px; color: #333; line-height: 1.4; word-wrap: break-word; 
+            font-size: 20px; color: #333; line-height: 1.4; word-wrap: break-word; 
         }
 
-        #ayet-quelle { text-align: center; color: #888; font-weight: bold; font-size: 12px; margin-top: 10px; }
+        #ayet-quelle { text-align: center; color: #888; font-weight: bold; font-size: 14px; margin-top: 15px; }
+
+        /* MONITOR ANPASSUNGEN */
+        @media screen and (min-width: 1200px) {
+            #ayet-text { font-size: 32px; line-height: 1.3; } /* Erhöht von 18 auf 32 */
+            #ayet-quelle { font-size: 22px; }
+            .ayet-label-box { font-size: 22px; }
+            .container { justify-content: flex-start; gap: 10px; }
+        }
 
         @media (max-width: 768px) {
             .vakit-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -144,18 +119,14 @@
             .vakit-time { font-size: 22px; }
         }
 
-        /* --- 7. FOOTER VE COPYRIGHT --- */
+        /* --- 6. FOOTER --- */
         .footer { 
             width: 100%; text-align: center; color: #cc0000; font-weight: 800; 
-            font-size: clamp(18px, 4vw, 25px); margin-top: 40px; padding-bottom: 20px; flex-shrink: 0; 
+            font-size: clamp(18px, 4vw, 25px); margin-top: 20px; padding-bottom: 20px; flex-shrink: 0; 
         }
-
-        .copyright {
-            font-size: 14px; font-weight: 400; color: #999; margin-top: 10px; text-transform: none;
-        }
+        .copyright { font-size: 14px; font-weight: 400; color: #999; margin-top: 5px; text-transform: none; }
     </style>
 </head>
-
 <body>
     <div class="container">
         <div class="city-picker" id="picker-area">
@@ -164,7 +135,7 @@
                 <option value="BW">Baden-Württemberg</option>
                 <option value="BY">Bayern</option>
             </select>
-            <select id="city-select" onchange="update()" style="display:none;">
+            <select id="city-select" onchange="handleManualCityChange()">
                 <option value="">Lütfen Şehir Seçin</option>
             </select>
         </div>   
@@ -206,105 +177,93 @@
     </div>
 
     <script>
-        // --- DATA YAPISI ---
         const cityDataStructure = {
-            "BW": [
-                { id: "reutlingen", name: "Reutlingen" }, 
-                { id: "filderstadt", name: "Filderstadt" }, 
-                { id: "nuertingen", name: "Nürtingen" }
-            ],
-            "BY": [
-                { id: "muenchen", name: "München" }
-            ]
+            "BW": [{ id: "reutlingen", name: "Reutlingen" }, { id: "filderstadt", name: "Filderstadt" }, { id: "nuertingen", name: "Nürtingen" }],
+            "BY": [{ id: "muenchen", name: "München" }]
         };
 
-        let interval;
+        let interval; 
         window.lastDate = ""; 
+        window.urlCityOverride = null; // Fix für URL-Parameter Konflikt
         const vakitNamen = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
         
-        // --- EYALETE GÖRE ŞEHİRLERİ LİSTELE ---
+        // Initialisierung der URL-Parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        window.urlCityOverride = urlParams.get('city');
+
         function updateCities(savedCityId = null) {
             const stateSelect = document.getElementById('state-select');
             const citySelect = document.getElementById('city-select');
             const state = stateSelect.value;
-            
             citySelect.innerHTML = '<option value="">Lütfen Şehir Seçin</option>';
             if (state && cityDataStructure[state]) {
                 cityDataStructure[state].forEach(c => {
                     let opt = document.createElement('option');
-                    opt.value = c.id; 
-                    opt.text = c.name;
+                    opt.value = c.id; opt.text = c.name;
                     if(savedCityId && c.id === savedCityId) opt.selected = true;
                     citySelect.appendChild(opt);
                 });
                 citySelect.style.display = 'inline-block';
-            } else { 
-                citySelect.style.display = 'none'; 
-            }
+            } else { citySelect.style.display = 'none'; }
         }
 
-        // --- ANA GÜNCELLEME FONKSİYONU ---
+        // Wenn der User manuell klickt, URL-Parameter ignorieren
+        function handleManualCityChange() {
+            window.urlCityOverride = null; 
+            update();
+        }
+
         async function update() {
             const citySelect = document.getElementById('city-select');
             const stateSelect = document.getElementById('state-select');
             const pickerArea = document.getElementById('picker-area');
             const urlParams = new URLSearchParams(window.location.search);
-            const urlCity = urlParams.get('city');
 
-            // Admin kontrolü: Seçim menüsünü gizle
+            // Admin-Mode: Menü verstecken
             if (urlParams.has('admin')) { pickerArea.style.display = 'none'; } else { pickerArea.style.display = 'flex'; }
 
-            // İlk açılışta URL veya LocalStorage kontrolü
+            // Erstmaliges Laden (LocalStorage oder URL)
             if (!window.initialLoadDone) {
-                const savedCity = urlCity || localStorage.getItem('userCity');
-                if (savedCity) {
+                const initialCity = window.urlCityOverride || localStorage.getItem('userCity');
+                if (initialCity) {
                     for (let s in cityDataStructure) {
-                        const found = cityDataStructure[s].find(c => c.id === savedCity);
-                        if (found) {
-                            stateSelect.value = s;
-                            updateCities(savedCity);
-                            break;
-                        }
+                        const found = cityDataStructure[s].find(c => c.id === initialCity);
+                        if (found) { stateSelect.value = s; updateCities(initialCity); break; }
                     }
                 }
                 window.initialLoadDone = true;
             }
 
-            const city = urlCity || citySelect.value;
+            const city = window.urlCityOverride || citySelect.value;
             const cacheBuster = "?v=" + new Date().getTime();
 
-            // 1. Ayet / Hadis Getir
+            // 1. Ayet laden
             try {
                 const ayetRes = await fetch(`./data/ayetler.json${cacheBuster}`);
                 const ayetData = await ayetRes.json();
                 const now = new Date();
                 const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
                 const ayet = ayetData[dateStr];
-                
                 document.getElementById('ayet-container').style.display = 'block';
                 if (ayet) { 
                     document.getElementById('ayet-text').innerText = ayet.text; 
-                    document.getElementById('ayet-quelle').innerText = ayet.quelle; // Bindestrich silindi
+                    document.getElementById('ayet-quelle').innerText = ayet.quelle; 
                     document.getElementById('ayet-quelle').style.display = 'block'; 
                 } else { 
                     document.getElementById('ayet-text').innerText = "Günün Ayeti / Hadisi bulunamadı."; 
                     document.getElementById('ayet-quelle').style.display = 'none'; 
                 }
-            } catch (e) { 
-                document.getElementById('ayet-container').style.display = 'block'; 
-                document.getElementById('ayet-text').innerText = "Ayet verileri yüklenemedi."; 
-            }
+            } catch (e) { document.getElementById('ayet-container').style.display = 'block'; document.getElementById('ayet-text').innerText = "Ayet verileri yüklenemedi."; }
 
             if (!city) return;
 
-            // 2. Widget Görünürlüğü ve Kayıt
+            // 2. Widget anzeigen & Stadt speichern
             document.getElementById('main-widget').style.opacity = "1";
             localStorage.setItem('userCity', city);
-            
             const selectedText = citySelect.options[citySelect.selectedIndex]?.text;
             document.getElementById('city-title').innerText = (selectedText && selectedText !== "Lütfen Şehir Seçin") ? selectedText : city.toUpperCase();
 
-            // 3. Vakit Verilerini Getir
+            // 3. Zeiten laden
             try {
                 const cityRes = await fetch(`./data/${city}.json${cacheBuster}`);
                 const cityData = await cityRes.json();
@@ -312,17 +271,10 @@
                 const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
                 window.lastDate = dateStr;
                 const today = cityData[dateStr];
-                
-                if (today) { 
-                    document.getElementById('hicri-tarih').innerText = today.hicri; 
-                    renderTimes(today.vakitler, cityData, now); 
-                }
-            } catch (err) { 
-                document.getElementById('next-vakit-name').innerText = "Vakit verileri yüklenemedi."; 
-            }
+                if (today) { document.getElementById('hicri-tarih').innerText = today.hicri; renderTimes(today.vakitler, cityData, now); }
+            } catch (err) { document.getElementById('next-vakit-name').innerText = "Vakit verileri yüklenemedi."; }
         }
 
-        // --- VAKİTLERİ EKRANA ÇİZ ---
         function renderTimes(times, allData, now) {
             let next = null, nextIndex = -1;
             for (let i = 0; i < 6; i++) {
@@ -332,23 +284,14 @@
                 document.getElementById('t-' + i).innerText = times[i];
                 document.getElementById('box-' + i).classList.remove('active');
             }
-            // Gece yarısından sonraki ilk vakti (İmsak) kontrol et
             if (!next) {
                 const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1);
                 const tStr = `${String(tomorrow.getDate()).padStart(2, '0')}.${String(tomorrow.getMonth() + 1).padStart(2, '0')}.${tomorrow.getFullYear()}`;
-                if (allData[tStr]) { 
-                    const [h, min] = allData[tStr].vakitler[0].split(':').map(Number); 
-                    next = new Date(tomorrow); next.setHours(h, min, 0, 0); nextIndex = 0; 
-                }
+                if (allData[tStr]) { const [h, min] = allData[tStr].vakitler[0].split(':').map(Number); next = new Date(tomorrow); next.setHours(h, min, 0, 0); nextIndex = 0; }
             }
-            if (nextIndex !== -1) { 
-                document.getElementById('box-' + nextIndex).classList.add('active'); 
-                document.getElementById('next-vakit-name').innerText = vakitNamen[nextIndex] + " Vaktine"; 
-                startCountdown(next); 
-            }
+            if (nextIndex !== -1) { document.getElementById('box-' + nextIndex).classList.add('active'); document.getElementById('next-vakit-name').innerText = vakitNamen[nextIndex] + " Vaktine"; startCountdown(next); }
         }
 
-        // --- GERİ SAYIM SAYACI ---
         function startCountdown(target) {
             if (interval) clearInterval(interval);
             interval = setInterval(() => {
@@ -360,13 +303,8 @@
             }, 1000);
         }
 
-        // Gece yarısı otomatik yenileme (Gün dönümü kontrolü)
-        setInterval(() => { 
-            const n = new Date(); 
-            const ds = `${String(n.getDate()).padStart(2, '0')}.${String(n.getMonth() + 1).padStart(2, '0')}.${n.getFullYear()}`; 
-            if (window.lastDate && window.lastDate !== ds) update(); 
-        }, 60000);
-
+        // Tageweise Prüfung
+        setInterval(() => { const n = new Date(); const ds = `${String(n.getDate()).padStart(2, '0')}.${String(n.getMonth() + 1).padStart(2, '0')}.${n.getFullYear()}`; if (window.lastDate && window.lastDate !== ds) update(); }, 60000);
         update();
     </script>
 </body>
