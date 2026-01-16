@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=Oregano&family=Pacifico&display=swap" rel="stylesheet">
     
     <style>
-        /* --- 1. GENEL SAYFA TASARIMI --- */
+        /* --- 1. TEMEL SAYFA AYARLARI --- */
         html, body { 
             margin: 0; padding: 0; width: 100%; min-height: 100vh; 
             background-color: white; font-family: 'Montserrat', sans-serif; 
@@ -18,11 +18,11 @@
             flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box;
         }
 
-        /* --- 2. LOGO VE BAŞLIKLAR --- */
+        /* --- 2. BAŞLIK VE LOGO TASARIMI --- */
         .logo-top { width: 450px; max-width: 60%; height: auto; margin-top: 10px; }
 
         .title-red { 
-            color: #cc0000; font-size: clamp(30px, 6vw, 80px); font-weight: 800; 
+            color: #cc0000; font-size: clamp(27px, 5.5vw, 77px); font-weight: 800; 
             margin: 10px 0 5px 0; text-transform: uppercase; text-align: center; 
         }
 
@@ -48,7 +48,7 @@
             background: #f9f9f9; color: #666; cursor: pointer; min-width: 200px; 
         }
 
-        /* --- 4. COUNTER VE WIDGET TASARIMI --- */
+        /* --- 4. GERİ SAYIM (COUNTER) TASARIMI --- */
         .custom-widget { 
             background: #f9f9f9; border-radius: 30px; padding: 25px; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 95%; max-width: 1300px; 
@@ -108,7 +108,7 @@
             font-size: clamp(16px, 3vw, 38px); font-weight: 800; color: #333; 
         }
 
-        /* --- 6. AYET VE HADİS KUTUSU --- */
+        /* --- 6. AYET VE HADİS BÖLÜMÜ --- */
         #ayet-container { display: none; margin-top: 20px; text-align: center; }
 
         .ayet-label-box { 
@@ -122,9 +122,9 @@
             font-size: 18px; color: #333; line-height: 1.4; word-wrap: break-word; 
         }
 
-        #ayet-quelle { text-align: center; color: #888; font-weight: bold; font-size: 12px; }
+        #ayet-quelle { text-align: center; color: #888; font-weight: bold; font-size: 12px; margin-top: 10px; }
 
-        /* --- 7. BÜYÜK EKRANLAR İÇİN (TV/LAPTOP) --- */
+        /* --- 7. BÜYÜK EKRANLAR (TV / MONITOR) --- */
         @media screen and (min-width: 1200px) {
             #ayet-text { font-size: 38px; line-height: 1.2; }
             #ayet-quelle { font-size: 22px; }
@@ -132,7 +132,7 @@
             .container { justify-content: flex-start; gap: 10px; }
         }
 
-        /* --- 8. MOBİL EKRANLAR İÇİN --- */
+        /* --- 8. MOBİL EKRANLAR --- */
         @media (max-width: 768px) {
             .container { height: auto; min-height: 100vh; }
             .city-picker { flex-direction: column; align-items: center; }
@@ -222,7 +222,6 @@
         window.lastDate = ""; 
         const vakitNamen = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
 
-        // --- FONKSİYON: EYALETE GÖRE ŞEHİR LİSTESİNİ GÜNCELLEME ---
         function updateCities() {
             const state = document.getElementById('state-select').value;
             const citySelect = document.getElementById('city-select');
@@ -241,21 +240,25 @@
             }
         }
 
-        // --- FONKSİYON: VERİLERİ (JSON) ÇEKME VE GÜNCELLEME ---
         async function update() {
             const citySelect = document.getElementById('city-select');
             const pickerContainer = document.querySelector('.city-picker');
             const urlParams = new URLSearchParams(window.location.search);
 
-            // Admin veya Şehir parametresi varsa seçimi gizle
-            if (urlParams.has('admin') || urlParams.has('city')) { pickerContainer.style.display = 'none'; }
-
-            // İlk yükleme ayarları (URL -> LocalStorage)
+            // 1. ZORUNLU: URL PARAMETRESINI İLK SIRADA KONTROL ET
             if (!window.initialLoadDone) {
                 const urlCity = urlParams.get('city');
-                if (urlCity) { citySelect.value = urlCity; }
-                else if (localStorage.getItem('userCity')) { citySelect.value = localStorage.getItem('userCity'); }
+                if (urlCity) { 
+                    citySelect.value = urlCity; 
+                } else if (localStorage.getItem('userCity')) { 
+                    citySelect.value = localStorage.getItem('userCity'); 
+                }
                 window.initialLoadDone = true;
+            }
+
+            // Seçim menüsünü gizle (Eğer şehir URL'de varsa)
+            if (urlParams.has('admin') || urlParams.has('city')) { 
+                pickerContainer.style.display = 'none'; 
             }
             
             const city = citySelect.value;
@@ -264,7 +267,7 @@
             const ayetQuelle = document.getElementById('ayet-quelle');
             const cacheBuster = "?v=" + new Date().getTime();
 
-            // 1. Ayet ve Hadis Verilerini Çek
+            // 2. AYET VERİSİNİ ÇEK
             try {
                 const ayetRes = await fetch(`./data/ayetler.json${cacheBuster}`);
                 const ayetData = await ayetRes.json();
@@ -287,12 +290,18 @@
                 ayetText.innerText = "Ayet verileri yüklenemedi."; 
             }
 
-            // 2. Namaz Vakti Verilerini Çek
-            if (!city) return;
+            // 3. VAKİT VERİLERİNİ ÇEK (Eğer şehir seçiliyse)
+            if (!city || city === "") {
+                document.getElementById('city-title').innerText = "Lütfen Seçim Yapın";
+                return;
+            }
 
             document.getElementById('main-widget').style.opacity = "1";
             localStorage.setItem('userCity', city);
-            document.getElementById('city-title').innerText = citySelect.options[citySelect.selectedIndex]?.text || city;
+            
+            // Dropdown'dan isim al veya URL'deki ID'yi büyük yaz
+            const selectedText = citySelect.options[citySelect.selectedIndex]?.text;
+            document.getElementById('city-title').innerText = (selectedText && selectedText !== "Lütfen Şehir Seçin") ? selectedText : city;
 
             try {
                 const cityRes = await fetch(`./data/${city}.json${cacheBuster}`);
@@ -311,21 +320,17 @@
             }
         }
 
-        // --- FONKSİYON: VAKİTLERİ EKRANA YAZDIRMA VE SIRADAKİ VAKTİ BULMA ---
         function renderTimes(times, allData, now) {
             let next = null, nextIndex = -1;
             
             for (let i = 0; i < 6; i++) {
                 const [h, min] = times[i].split(':').map(Number);
                 const pDate = new Date(now); pDate.setHours(h, min, 0, 0);
-                
                 if (!next && pDate > now) { next = pDate; nextIndex = i; }
-                
                 document.getElementById('t-' + i).innerText = times[i];
                 document.getElementById('box-' + i).classList.remove('active');
             }
 
-            // Eğer bugün vakit kalmadıysa yarına (İmsak) geç
             if (!next) {
                 const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1);
                 const tStr = `${String(tomorrow.getDate()).padStart(2, '0')}.${String(tomorrow.getMonth() + 1).padStart(2, '0')}.${tomorrow.getFullYear()}`;
@@ -335,7 +340,6 @@
                 }
             }
 
-            // Aktif vakti işaretle ve geri sayımı başlat
             if (nextIndex !== -1) {
                 document.getElementById('box-' + nextIndex).classList.add('active');
                 document.getElementById('next-vakit-name').innerText = vakitNamen[nextIndex] + " Vaktine";
@@ -343,7 +347,6 @@
             }
         }
 
-        // --- FONKSİYON: GERİ SAYIM SAYACI (TICKER) ---
         function startCountdown(target) {
             if (interval) clearInterval(interval);
             interval = setInterval(() => {
@@ -356,14 +359,13 @@
             }, 1000);
         }
 
-        // --- OTOMATİK TARIH KONTROLÜ (GÜN DÖNÜMÜ İÇİN) ---
+        // Dakikada bir gün değişimi kontrolü (Gece yarısı için)
         setInterval(() => {
             const n = new Date();
             const ds = `${String(n.getDate()).padStart(2, '0')}.${String(n.getMonth() + 1).padStart(2, '0')}.${n.getFullYear()}`;
             if (window.lastDate && window.lastDate !== ds) update();
         }, 60000);
 
-        // Uygulamayı başlat
         update();
     </script>
 </body>
