@@ -132,8 +132,8 @@
         <div class="city-picker" id="picker-area">
             <select id="state-select" onchange="updateCities()">
                 <option value="">Eyalet Seçin</option>
-                <option value="BW">Baden-Württemberg</option>
-                <option value="BY">Bayern</option>
+                    <option value="BW">Baden-Württemberg</option>
+                    <option value="Bayern">Bayern</option>
             </select>
             <select id="city-select" onchange="handleManualCityChange()">
                 <option value="">Lütfen Şehir Seçin</option>
@@ -178,8 +178,14 @@
 
     <script>
         const cityDataStructure = {
-            "BW": [{ id: "reutlingen", name: "Reutlingen" }, { id: "filderstadt", name: "Filderstadt" }, { id: "nuertingen", name: "Nürtingen" }],
-            "BY": [{ id: "muenchen", name: "München" }]
+            "BW": 
+                    [{ id: "reutlingen", name: "Reutlingen" }, 
+                    { id: "filderstadt", name: "Filderstadt" }, 
+                    { id: "nuertingen", name: "Nürtingen" }],
+                    { id: "giengen", name: "Giengen a.d. Brenz" }],
+           
+            "Bayern": 
+                    [{ id: "muenchen", name: "München" }]
         };
 
         let interval; 
@@ -309,6 +315,7 @@
     </script>
 </body>
 </html>
+
 
 
 
