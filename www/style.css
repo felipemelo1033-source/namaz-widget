@@ -438,7 +438,7 @@ body.admin-mode .title-blue {
 }
 
 body.admin-mode .footer {
-    margin-top: 40px !important; /* Etwas Abstand zum Ayet-Container */
+    margin-top: 30px !important; /* Etwas Abstand zum Ayet-Container */
     padding-bottom: 30px;
 }
 
@@ -452,6 +452,7 @@ body.admin-mode .footer div:nth-child(2) {
     color: #aaa;                /* Etwas dezenteres Grau */
     margin-top: 5px;
 }
+
 
 
 
