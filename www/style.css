@@ -70,7 +70,7 @@ body {
     align-items: center;
     gap: 15px; 
     margin-top: 15px;
-	margin-mottom: 15px;
+	margin-bottom: 15px;
     flex-wrap: wrap; 
 }
 
@@ -436,6 +436,7 @@ body.admin-mode .title-blue {
     margin-bottom: 5px; /* Kleiner Abstand zum Datum-Bereich */
     line-height: 1.1;
 }
+
 
 
 
