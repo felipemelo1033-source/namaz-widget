@@ -36,11 +36,11 @@ body {
 /* ==========================================================================
    2. LOGO UND TITEL
    ========================================================================== */
-.logo-top { 
-    width: 450px; 
-    max-width: 60%; 
-    height: auto; 
-    margin-top: 20px; 
+.logo-top {
+    width: 450px;
+    max-width: 60%;
+    height: auto;
+    margin-top: 1px;
 }
 
 .title-red { 
@@ -436,6 +436,7 @@ body.admin-mode .title-blue {
     margin-bottom: 5px; /* Kleiner Abstand zum Datum-Bereich */
     line-height: 1.1;
 }
+
 
 
 
