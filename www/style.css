@@ -323,7 +323,7 @@ body {
 #ayet-text { 
     font-family: 'Montserrat', sans-serif; 
     font-style: italic; 
-    font-size: 16px; 
+    font-size: 15px; 
     color: #333; 
     line-height: 1.4; 
     word-wrap: break-word;
@@ -338,7 +338,7 @@ body {
 }
 
 @media screen and (min-width: 1200px) { 
-    #ayet-text { font-size: 32px; } 
+    #ayet-text { font-size: 24px; } 
 }
 
 .footer { 
@@ -436,6 +436,7 @@ body.admin-mode .title-blue {
     margin-bottom: 5px; /* Kleiner Abstand zum Datum-Bereich */
     line-height: 1.1;
 }
+
 
 
 
