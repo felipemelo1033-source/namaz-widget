@@ -438,10 +438,21 @@ body.admin-mode .title-blue {
 }
 
 body.admin-mode .footer {
-    font-size: 30px;
+    margin-top: 15px !important; /* Etwas Abstand zum Ayet-Container */
+    padding-bottom: 30px;
 }
 
+body.admin-mode .footer div:first-child {
+    font-size: 30px;            /* "BİZ BÜYÜK BİR AİLEYİZ!" auf 30px */
+    letter-spacing: 2px;        /* Etwas mehr Abstand zwischen den Buchstaben für die Fernwirkung */
+    font-weight: 800;           /* Extra fett für maximale Präsenz */
+}
 
+body.admin-mode .footer div:nth-child(2) {
+    font-size: 18px;            /* Der "Alle Rechte vorbehalten" Text etwas größer als normal */
+    color: #aaa;                /* Etwas dezenteres Grau */
+    margin-top: 5px;
+}
 
 
 
