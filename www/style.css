@@ -424,8 +424,8 @@ body.admin-mode #city-title {
 
 body.admin-mode .title-red {
     font-size: 2.5rem;
-    margin-top: 5px;    /* Kleiner Abstand nach oben */
-    margin-bottom: 0;   /* Keinerlei Abstand nach unten zum blauen Titel */
+    margin-top: 20px;    /* Kleiner Abstand nach oben */
+    margin-bottom: 15px;   /* Keinerlei Abstand nach unten zum blauen Titel */
     line-height: 1;     /* Verhindert unsichtbaren Platz durch die Schrifthöhe */
 }
 
@@ -435,3 +435,4 @@ body.admin-mode .title-blue {
     margin-bottom: 5px; /* Kleiner Abstand zum Datum-Bereich */
     line-height: 1.1;
 }
+
