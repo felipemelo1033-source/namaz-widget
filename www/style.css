@@ -365,7 +365,7 @@ body.admin-mode .custom-widget {
 }
 
 body.admin-mode .title-red {
-    font-size: 3rem; /* Größerer Titel für Fernseher/Monitore */
+    font-size: 2rem; /* Größerer Titel für Fernseher/Monitore */
 }
 
 body.admin-mode #ayet-text {
@@ -416,7 +416,7 @@ body.admin-mode #date-separator {
 
 /* Optimierung des Abstands zum Widget */
 body.admin-mode #city-title {
-    font-size: 4.5rem; /* Der Stadtname wird zum echten Hingucker */
+    font-size: 6.5rem; /* Der Stadtname wird zum echten Hingucker */
     margin-bottom: 10px;
 }
 
@@ -471,6 +471,7 @@ body.admin-mode .footer .admin-footer-logo {
     height: auto;
     opacity: 0.9;
 }
+
 
 
 
