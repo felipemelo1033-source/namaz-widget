@@ -1,0 +1,421 @@
+/* ==========================================================================
+   1. GRUNDLAYOUT & TYPOGRAFIE
+   ========================================================================== */
+html, 
+body { 
+    margin: 0; 
+    padding: 0; 
+    width: 100%; 
+    min-height: 100vh; 
+    background-color: white; 
+    font-family: 'Montserrat', sans-serif; 
+    display: flex; 
+    justify-content: center; 
+    overflow-x: hidden; 
+}
+
+.container { 
+    width: 100%; 
+    min-height: 100vh; /* min-height statt fester height */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; /* Zentriert den Block vertikal auf dem Monitor */
+    padding: 20px; 
+    box-sizing: border-box; 
+}
+
+/* Responsive Container für Mobile */
+@media (max-width: 768px) { 
+    .container { 
+        height: auto; 
+        min-height: 100vh; 
+    } 
+}
+
+/* ==========================================================================
+   2. LOGO UND TITEL
+   ========================================================================== */
+.logo-top { 
+    width: 450px; 
+    max-width: 60%; 
+    height: auto; 
+    margin-top: 20px; 
+}
+
+.title-red { 
+    color: #cc0000; 
+    font-size: clamp(21px, 6vw, 60px); 
+    font-weight: 800; 
+    margin: 12px 0 15px 0; 
+    text-transform: uppercase; 
+    text-align: center; 
+}
+
+.title-blue { 
+    color: #72b1c4; 
+    font-family: 'Oregano', cursive; 
+    font-size: clamp(40px, 8vw, 100px); 
+    margin: 7px 0 -3px 0; 
+    text-align: center; 
+}
+
+/* ==========================================================================
+   3. DATUMSANZEIGE (NEBENEINANDER)
+   ========================================================================== */
+.date-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; 
+    margin-top: 15px;
+    flex-wrap: wrap; 
+}
+
+#güncel-tarih, 
+#hicri-tarih {
+    margin: 0 !important; 
+    white-space: nowrap; 
+}
+
+#hicri-tarih { 
+    font-size: clamp(18px, 4vw, 28px); 
+    color: #666; 
+    font-weight: 800; 
+}
+
+#date-separator {
+    color: #ccc;
+    font-weight: 400;
+}
+
+@media (max-width: 480px) {
+    .date-container { gap: 5px; }
+    #date-separator { display: none; }
+}
+
+/* ==========================================================================
+   4. SUCHE & STADT-AUSWAHL
+   ========================================================================== */
+.search-wrapper {
+    width: 100% !important;
+    max-width: 350px !important;
+    margin: 5px auto !important;
+    position: relative; 
+    z-index: 9999; 
+}
+
+.input-group {
+    display: flex;
+    height: 45px; 
+    background: #fff;
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-group:focus-within {
+    border-color: #cc0000;
+    box-shadow: 0 4px 15px rgba(204, 0, 0, 0.1);
+}
+
+#city-search-input {
+    flex: 1;
+    border: none;
+    padding: 0 15px;
+    font-size: 18px;
+    outline: none;
+    height: 100%;
+    background: transparent;
+}
+
+#location-btn {
+    background: #f9f9f9;
+    border: none;
+    border-left: 1px solid #eee;
+    padding: 0 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#location-btn:hover { background: #f0f0f0; }
+
+#search-results {
+    position: absolute;
+    top: 45px; 
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    display: none;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-top: none;
+    z-index: 10000;
+}
+
+/* Menü-Dropdowns */
+.city-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    gap: 0; 
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+#state-select, 
+#city-select {
+    width: 100% !important;
+    max-width: 350px !important;
+    margin: 5px auto !important;
+    box-sizing: border-box !important;
+    height: 45px !important;
+    display: block !important;
+    padding: 10px 15px; 
+    font-size: 18px; 
+    border-radius: 8px; 
+    border: 1px solid #ddd; 
+    background: #f9f9f9; 
+    color: #666; 
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   5. GEBETSZEITEN WIDGET
+   ========================================================================== */
+.custom-widget { 
+    background: #f9f9f9; 
+    border-radius: 30px; 
+    padding: 25px; 
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1); 
+    width: 95%; 
+    max-width: 1300px; 
+    text-align: center; 
+    border: 2px solid #eee; 
+    box-sizing: border-box; 
+}
+
+.countdown-container { 
+    display: flex; 
+    justify-content: center; 
+    gap: 10px; 
+    color: #cc0000; 
+    margin-bottom: 20px; 
+}
+
+.countdown-number { 
+    font-size: clamp(40px, 10vw, 110px); 
+    font-weight: 800; 
+    line-height: 1; 
+}
+
+#next-vakit-name { 
+    color: #000000; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    font-size: clamp(16px, 3vw, 24px); 
+    margin-bottom: 10px; 
+    letter-spacing: 1px; 
+}
+
+/* Grid-System für die Zeiten */
+.vakit-grid { 
+    display: grid; 
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 10px; 
+}
+
+.vakit-item { 
+    padding: 15px 5px; 
+    background: white; 
+    border-radius: 15px; 
+    border: 1px solid #ddd; 
+}
+
+.vakit-item.active { 
+    border: 6px solid #cc0000; 
+    transform: scale(1.05); 
+}
+
+.vakit-time { 
+    font-size: clamp(16px, 3vw, 38px); 
+    font-weight: 800; 
+}
+
+@media (max-width: 768px) { 
+    .vakit-grid { grid-template-columns: repeat(2, 1fr); } 
+}
+
+/* ==========================================================================
+   6. WOCHENTABELLE
+   ========================================================================== */
+#weekly-container { 
+    display: none; 
+    margin-top: 25px !important; 
+    margin-bottom: 0 !important; 
+}
+
+#weekly-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 10px; 
+}
+
+#weekly-table th { 
+    padding: 10px; 
+    border-bottom: 2px solid #cc0000; 
+    font-size: 14px; 
+}
+
+#weekly-table td { 
+    padding: 12px 5px; 
+    border-bottom: 1px solid #eee; 
+    font-size: 14px; 
+}
+
+#weekly-table tr:nth-child(even) { background-color: #f2f2f2; }
+#weekly-table tr:hover { background-color: #ffebeb; }
+
+#weekly-toggle-text {
+    transition: all 0.2s ease;
+    user-select: none;
+    cursor: pointer;
+}
+
+#weekly-toggle-text:hover {
+    color: #72b1c4;
+    background-color: #f0f8fa;
+}
+
+#weekly-toggle-text:active { transform: scale(0.98); color: #000; }
+
+@media (max-width: 768px) { 
+    #weekly-table { font-size: 12px; } 
+}
+
+/* ==========================================================================
+   7. AYET & FOOTER
+   ========================================================================== */
+#ayet-container { 
+    display: none; 
+    margin-top: 25px !important; 
+    margin-bottom: 0 !important; 
+    text-align: center; 
+}
+
+.ayet-label-box { 
+    color: #cc0000; 
+    font-weight: 800; 
+    font-size: 14px; 
+    text-transform: uppercase; 
+    border-bottom: 1px solid #eee; 
+    padding-bottom: 7px; 
+}
+
+#ayet-text { 
+    font-family: 'Montserrat', sans-serif; 
+    font-style: italic; 
+    font-size: 16px; 
+    color: #333; 
+    line-height: 1.4; 
+    word-wrap: break-word;
+}
+
+#ayet-quelle { 
+    text-align: center; 
+    color: #888; 
+    font-weight: bold; 
+    font-size: 14px; 
+    margin-top: 3px; 
+}
+
+@media screen and (min-width: 1200px) { 
+    #ayet-text { font-size: 32px; } 
+}
+
+.footer { 
+    width: 100%; 
+    text-align: center; 
+    color: #cc0000; 
+    font-weight: 800; 
+    font-size: 20px; 
+    margin-top: 25px !important; 
+    padding-bottom: 20px; 
+}
+
+/* Spezielle Optimierung für den Vollbild-Modus */
+body.admin-mode .container {
+    justify-content: space-around; /* Verteilt Elemente über die gesamte Höhe */
+    height: 100vh;
+    padding: 40px;
+}
+
+body.admin-mode .custom-widget {
+    max-width: 80%; /* Nutzt die Breite besser aus */
+    transform: scale(1.1); /* Skaliert das Widget leicht hoch */
+    margin: 20px 0;
+	max-width: 1600px;
+}
+
+body.admin-mode .title-red {
+    font-size: 3rem; /* Größerer Titel für Fernseher/Monitore */
+}
+
+body.admin-mode #ayet-text {
+    font-size: 42px; /* Deutlich lesbarere Ayet-Texte */
+}
+
+body.admin-mode .vakit-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 25px;               /* Größere Abstände zwischen den Boxen */
+}
+
+body.admin-mode .vakit-item {
+    padding: 30px 10px;      /* Höhere Boxen für bessere Sichtbarkeit von weitem */
+}
+
+body.admin-mode .vakit-time {
+    font-size: clamp(30px, 4vw, 55px); /* Deutlich größere Zeitanzeige */
+}
+
+body.admin-mode .vakit-item div:first-child {
+    font-size: 22px;         /* Namen der Gebete (Öğle, vs.) vergrößern */
+    margin-bottom: 10px;
+}
+
+/* --- Admin-Modus: Datum Vergrößerung --- */
+body.admin-mode .date-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 30px; /* Größerer Abstand zwischen gregorianisch und hicri */
+}
+
+body.admin-mode #güncel-tarih {
+    font-size: 1.5rem; /* Massive Vergrößerung für den 1920er Schirm */
+    font-weight: 600;
+    color: #333;
+}
+
+body.admin-mode #hicri-tarih {
+    font-size: 1.5rem; /* Gleiche Größe wie das aktuelle Datum */
+    font-weight: 800;
+    color: #666;
+}
+
+body.admin-mode #date-separator {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+/* Optimierung des Abstands zum Widget */
+body.admin-mode #city-title {
+    font-size: 4.5rem; /* Der Stadtname wird zum echten Hingucker */
+    margin-bottom: 10px;
+}
