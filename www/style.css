@@ -452,6 +452,28 @@ body.admin-mode .footer div:nth-child(2) {
     margin-top: 5px;
 }
 
+/* --- Admin-Modus: Logo-Umstrukturierung --- */
+
+/* 1. Logo oben komplett ausblenden */
+body.admin-mode .logo-top {
+    display: none !important;
+}
+
+/* 2. Standard-Favicon im Footer ausblenden */
+body.admin-mode .footer img[src="favicon.png"] {
+    display: none;
+}
+
+/* 3. Logo_oben im Footer anzeigen (Vorbeugend falls im HTML vorhanden) */
+body.admin-mode .footer .admin-footer-logo {
+    display: inline-block !important;
+    width: 200px; /* Breite für den Footer angepasst */
+    height: auto;
+    margin-top: 20px;
+    opacity: 0.9;
+}
+
+
 
 
 
