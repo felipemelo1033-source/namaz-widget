@@ -378,7 +378,7 @@ body.admin-mode .vakit-grid {
 }
 
 body.admin-mode .vakit-item {
-    padding: 30px 10px;      /* Höhere Boxen für bessere Sichtbarkeit von weitem */
+    padding: 10px 10px;
 }
 
 body.admin-mode .vakit-time {
@@ -392,15 +392,15 @@ body.admin-mode .vakit-item div:first-child {
 
 /* --- Admin-Modus: Datum Vergrößerung --- */
 body.admin-mode .date-container {
-    margin-top: 20px;
+    margin-top: 5px;
     margin-bottom: 20px;
-    gap: 30px; /* Größerer Abstand zwischen gregorianisch und hicri */
+    gap: 30px;
 }
 
 body.admin-mode #güncel-tarih {
     font-size: 1.5rem; /* Massive Vergrößerung für den 1920er Schirm */
-    font-weight: 600;
-    color: #333;
+    font-weight: 800;
+    color: #666;
 }
 
 body.admin-mode #hicri-tarih {
@@ -418,4 +418,20 @@ body.admin-mode #date-separator {
 body.admin-mode #city-title {
     font-size: 4.5rem; /* Der Stadtname wird zum echten Hingucker */
     margin-bottom: 10px;
+}
+
+/* --- Admin-Modus: Titel-Abstände optimieren --- */
+
+body.admin-mode .title-red {
+    font-size: 2.5rem;
+    margin-top: 5px;    /* Kleiner Abstand nach oben */
+    margin-bottom: 0;   /* Keinerlei Abstand nach unten zum blauen Titel */
+    line-height: 1;     /* Verhindert unsichtbaren Platz durch die Schrifthöhe */
+}
+
+body.admin-mode .title-blue {
+    font-size: 3.5rem;
+    margin-top: -5px;   /* Negativer Margin, um den Stadtnamen leicht hochzuziehen */
+    margin-bottom: 5px; /* Kleiner Abstand zum Datum-Bereich */
+    line-height: 1.1;
 }
