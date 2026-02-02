@@ -437,6 +437,9 @@ body.admin-mode .title-blue {
     line-height: 1.1;
 }
 
+body.admin-mode .footer {
+    font-size: 30px;
+}
 
 
 
