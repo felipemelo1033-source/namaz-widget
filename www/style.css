@@ -334,7 +334,6 @@ body {
     color: #888; 
     font-weight: bold; 
     font-size: 14px; 
-    margin-top: 3px; 
 }
 
 @media screen and (min-width: 1200px) { 
@@ -452,6 +451,7 @@ body.admin-mode .footer div:nth-child(2) {
     color: #aaa;                /* Etwas dezenteres Grau */
     margin-top: 5px;
 }
+
 
 
 
