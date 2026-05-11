@@ -1,0 +1,1 @@
+Namaz-Widget für Vereine
