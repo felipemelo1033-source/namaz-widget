@@ -198,6 +198,51 @@ function updateCurrentDate() {
 // Stelle sicher, dass die Funktion beim Start aufgerufen wird
 updateCurrentDate();
 
+// === LIVE-UHR & AUTOMATISCHER TAGESWECHSEL ===
+let lastDateKey = new Date().toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'});
+
+function tickClock() {
+    const now = new Date();
+    const clockEl = document.getElementById('live-clock');
+    if (clockEl) {
+        clockEl.innerText = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    // Tageswechsel erkennen: Datum, Vakitler und Ayet automatisch neu laden
+    // (wichtig für Bildschirme, die 24/7 durchlaufen)
+    const key = now.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'});
+    if (key !== lastDateKey) {
+        lastDateKey = key;
+        updateCurrentDate();
+        update();
+    }
+}
+tickClock();
+setInterval(tickClock, 1000);
+
+// === AYET AUTO-FIT (nur TV-/Admin-Modus) ===
+// Verkleinert die Ayet-Schrift schrittweise, falls ein langer Text
+// die Bildschirmseite überlaufen lassen würde – so bleibt alles auf einer Seite.
+function fitAyetToScreen() {
+    if (!document.body.classList.contains('admin-mode')) return;
+    const container = document.querySelector('.container');
+    const ayet = document.getElementById('ayet-text');
+    if (!container || !ayet) return;
+
+    let size = 2.6; // vh – Basisgröße, identisch zur CSS-Regel
+    ayet.style.fontSize = size + 'vh';
+
+    let guard = 0;
+    while (container.scrollHeight > container.clientHeight + 1 && size > 1.4 && guard < 40) {
+        size -= 0.1;
+        ayet.style.fontSize = size + 'vh';
+        guard++;
+    }
+}
+
+// Bei Fenster-/Auflösungsänderung neu anpassen
+window.addEventListener('resize', () => requestAnimationFrame(fitAyetToScreen));
+
 async function update() {
     const stateSelect = document.getElementById('state-select');
     const citySelect = document.getElementById('city-select');
@@ -226,6 +271,7 @@ if (urlParams.has('admin')) {
             document.getElementById('ayet-text').innerText = aData[dKey].text;
             document.getElementById('ayet-quelle').innerText = aData[dKey].quelle;
             ayetCont.style.display = 'block'; // WICHTIG: Hier wird es sichtbar gemacht
+            requestAnimationFrame(fitAyetToScreen); // langen Ayet auf eine Seite einpassen
         } else {
             ayetCont.style.display = 'none'; // Verstecken, wenn kein Ayet da ist
         }

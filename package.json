@@ -9,10 +9,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "@capacitor/android": "^8.0.1",
-    "@capacitor/cli": "^8.0.1",
-    "@capacitor/core": "^8.0.1"
-  }
+  "type": "commonjs"
 }

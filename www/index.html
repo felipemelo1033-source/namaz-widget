@@ -4,18 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATF Namaz Vakitleri</title>
-    
+
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="apple-touch-icon.png">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=Oregano&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,800;1,400&family=Oregano&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <img src="logo_oben.svg" class="logo-top" alt="ATF Logo">
-        <h1 class="title-red">NAMAZ VAKİTLERİ</h1>
+        <h1 class="title-red">Namaz Vakitleri</h1>
 
         <div class="search-wrapper">
             <div class="input-group">
@@ -26,7 +28,7 @@
             </div>
             <div id="search-results"></div>
         </div>
-        
+
         <div class="city-picker" id="picker-area">
             <select id="state-select" onchange="updateCities()">
                 <option value="">Eyalet Seçin</option>
@@ -50,29 +52,38 @@
             <select id="city-select" style="display:none" onchange="handleManualCityChange()"></select>
         </div>
 
-        <h2 class="title-blue" id="city-title">Lütfen Seçim Yapın</h2>
+        <h2 class="title-city" id="city-title">Lütfen Seçim Yapın</h2>
+
         <div class="date-container">
             <div id="güncel-tarih">--</div>
-            <div id="date-separator">|</div> 
+            <div class="date-sep">•</div>
+            <div id="live-clock">--:--:--</div>
+            <div class="date-sep">•</div>
             <div id="hicri-tarih">--</div>
         </div>
 
+        <img src="favicon.png" class="widget-icon" alt="ATF">
+
         <div class="custom-widget" id="main-widget" style="opacity: 0.5;">
-            <div id="next-vakit-name">--</div>
-            <div class="countdown-container">
-                <div class="countdown-block"><span id="hours" class="countdown-number">00</span><br><small>Saat</small></div>
-                <div class="countdown-number">:</div>
-                <div class="countdown-block"><span id="minutes" class="countdown-number">00</span><br><small>Dakika</small></div>
-                <div class="countdown-number">:</div>
-                <div class="countdown-block"><span id="seconds" class="countdown-number">00</span><br><small>Saniye</small></div>
+            <div class="hero-row">
+                <div class="hero-cell">
+                    <div class="hero-label" id="next-vakit-name">--</div>
+                    <div class="countdown-container">
+                        <div class="countdown-block"><span id="hours" class="countdown-number">00</span><br><small>Saat</small></div>
+                        <div class="countdown-number colon">:</div>
+                        <div class="countdown-block"><span id="minutes" class="countdown-number">00</span><br><small>Dakika</small></div>
+                        <div class="countdown-number colon">:</div>
+                        <div class="countdown-block"><span id="seconds" class="countdown-number">00</span><br><small>Saniye</small></div>
+                    </div>
+                </div>
             </div>
             <div class="vakit-grid">
-                <div class="vakit-item" id="box-0"><div>İmsak</div><div class="vakit-time" id="t-0">--:--</div></div>
-                <div class="vakit-item" id="box-1"><div>Güneş</div><div class="vakit-time" id="t-1">--:--</div></div>
-                <div class="vakit-item" id="box-2"><div>Öğle</div><div class="vakit-time" id="t-2">--:--</div></div>
-                <div class="vakit-item" id="box-3"><div>İkindi</div><div class="vakit-time" id="t-3">--:--</div></div>
-                <div class="vakit-item" id="box-4"><div>Akşam</div><div class="vakit-time" id="t-4">--:--</div></div>
-                <div class="vakit-item" id="box-5"><div>Yatsı</div><div class="vakit-time" id="t-5">--:--</div></div>
+                <div class="vakit-item" id="box-0"><div class="vakit-name">İmsak</div><div class="vakit-time" id="t-0">--:--</div></div>
+                <div class="vakit-item" id="box-1"><div class="vakit-name">Güneş</div><div class="vakit-time" id="t-1">--:--</div></div>
+                <div class="vakit-item" id="box-2"><div class="vakit-name">Öğle</div><div class="vakit-time" id="t-2">--:--</div></div>
+                <div class="vakit-item" id="box-3"><div class="vakit-name">İkindi</div><div class="vakit-time" id="t-3">--:--</div></div>
+                <div class="vakit-item" id="box-4"><div class="vakit-name">Akşam</div><div class="vakit-time" id="t-4">--:--</div></div>
+                <div class="vakit-item" id="box-5"><div class="vakit-name">Yatsı</div><div class="vakit-time" id="t-5">--:--</div></div>
             </div>
         </div>
 
@@ -80,7 +91,7 @@
             <div class="ayet-label-box" id="weekly-toggle-text" style="cursor:pointer; padding: 10px; border-radius: 10px;" onclick="toggleWeekly()">
                 📅 7 GÜNLÜK VAKİTLERİ GÖSTER
             </div>
-            
+
             <div id="weekly-table-wrapper" style="display:none; overflow-x:auto;">
                 <table id="weekly-table">
                     <thead>
@@ -98,11 +109,11 @@
         </div>
 
         <div class="footer">
-            <div>BİZ BÜYÜK BİR AİLEYİZ!</div>
+            <div class="footer-slogan">BİZ BÜYÜK BİR AİLEYİZ!</div>
             <div style="margin-top: 5px;">
                 <img src="favicon.png" alt="ATF Logo" style="width: 40px; height: 40px; opacity: 0.8;">
                 <img src="logo_oben.svg" class="admin-footer-logo" style="display: none;" alt="ATF Logo">
-                <div style="font-size:12px; font-weight:400; color:#999;">&copy; 2026 Alle Rechte vorbehalten</div>
+                <div class="footer-copyright">&copy; 2026 Alle Rechte vorbehalten</div>
             </div>
         </div>
     </div>
