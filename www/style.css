@@ -528,7 +528,7 @@ body.admin-mode .title-red {
 /* Kompakter Kopfbereich: Titel mittig oben */
 body.admin-mode .title-city {
     font-size: 11.4vh;
-    line-height: 1.05;
+    line-height: 1.3; /* Platz für Unterlängen der Schreibschrift (g, y) */
     margin: 0.4vh 0 0 0;
 }
 
@@ -582,7 +582,7 @@ body.admin-mode .custom-widget {
 
 /* Kopf + Widget sitzen oben; kleiner Abstand ersetzt das entfernte Icon;
    Restplatz verteilt sich unter dem Widget */
-body.admin-mode #main-widget { margin-top: 3vh; }
+body.admin-mode #main-widget { margin-top: 2vh; }
 
 body.admin-mode .hero-row {
     gap: 4.5vw;
