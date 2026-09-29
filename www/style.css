@@ -102,8 +102,6 @@ body {
     text-align: center;
 }
 
-/* Icon über dem Widget – nur im TV-/Admin-Modus sichtbar */
-.widget-icon { display: none; }
 
 /* --------------------------------------------------------------------------
    4. DATUMSZEILE
@@ -294,11 +292,13 @@ body {
     gap: 9px;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    font-weight: 800;
+    font-weight: 600;
     font-size: clamp(12px, 1.5vw, 17px);
     margin-bottom: 10px;
     color: var(--accent);
 }
+
+.hero-label strong { font-weight: 800; }
 
 /* --- Countdown --- */
 .countdown-container {
@@ -514,20 +514,20 @@ body.admin-mode .logo-top { display: none !important; }
 body.admin-mode .footer img[src="favicon.png"] { display: none; }
 body.admin-mode .footer .admin-footer-logo {
     display: inline-block !important;
-    width: clamp(160px, 20vh, 300px);
-    height: auto;
+    height: 3.2vh; /* Referenzgröße für footer-slogan/-copyright darunter */
+    width: auto;
     opacity: 0.95;
 }
 
 /* Titelbereich */
 body.admin-mode .title-red {
-    font-size: 2vh;
+    font-size: 2.2vh;
     margin: 0;
 }
 
 /* Kompakter Kopfbereich: Titel mittig oben */
 body.admin-mode .title-city {
-    font-size: 8vh;
+    font-size: 11.4vh;
     line-height: 1.05;
     margin: 0.4vh 0 0 0;
 }
@@ -561,35 +561,28 @@ body.admin-mode #hicri-tarih {
 
 body.admin-mode #live-clock {
     position: absolute;
-    top: 1.3vh;
+    top: 0;
     right: 3vw;
 }
 
 body.admin-mode .date-sep { display: none; }
 
 body.admin-mode #güncel-tarih,
-body.admin-mode #hicri-tarih { font-size: 2.4vh; }
+body.admin-mode #hicri-tarih { font-size: 2.6vh; }
 
-body.admin-mode #live-clock { font-size: 3vh; }
+body.admin-mode #live-clock { font-size: 3.4vh; }
 
-/* ATF-Icon zwischen Stadtname und Widget */
-body.admin-mode .widget-icon {
-    display: block;
-    height: 8vh;
-    width: auto;
-    margin: 1.2vh auto 1.4vh auto;
-}
-
-/* Widget */
+/* Widget – Breite = Container-Innenbreite, gleiche Kantenabstände wie Datum/Uhr (3vw) */
 body.admin-mode .custom-widget {
-    width: min(94vw, 1750px);
+    width: 100%;
     max-width: none;
     padding: 3vh 3vw 3.4vh 3vw;
     border-radius: 34px;
 }
 
-/* Kopf + Icon + Widget sitzen oben; Restplatz verteilt sich unter dem Widget */
-body.admin-mode #main-widget { margin-top: 0; }
+/* Kopf + Widget sitzen oben; kleiner Abstand ersetzt das entfernte Icon;
+   Restplatz verteilt sich unter dem Widget */
+body.admin-mode #main-widget { margin-top: 3vh; }
 
 body.admin-mode .hero-row {
     gap: 4.5vw;
@@ -597,12 +590,12 @@ body.admin-mode .hero-row {
     margin-bottom: 2.8vh;
 }
 
-body.admin-mode .hero-label { font-size: 1.9vh; margin-bottom: 1.4vh; }
+body.admin-mode .hero-label { font-size: 2.2vh; margin-bottom: 1.4vh; }
 
-body.admin-mode .countdown-number { font-size: 9.5vh; }
+body.admin-mode .countdown-number { font-size: 11.76vh; }
 
 body.admin-mode .countdown-block small {
-    font-size: 1.3vh;
+    font-size: 1.55vh;
     margin-top: 1vh;
 }
 
@@ -614,8 +607,8 @@ body.admin-mode .vakit-item {
     border-radius: 20px;
 }
 
-body.admin-mode .vakit-name { font-size: 2.1vh; margin-bottom: 1vh; }
-body.admin-mode .vakit-time { font-size: 4.6vh; }
+body.admin-mode .vakit-name { font-size: 2.5vh; margin-bottom: 1vh; }
+body.admin-mode .vakit-time { font-size: 4.9vh; }
 
 body.admin-mode .vakit-item.active::after {
     font-size: 1.4vh;
@@ -623,23 +616,23 @@ body.admin-mode .vakit-item.active::after {
     padding: 0.4vh 1.4vh;
 }
 
-/* Ayet */
+/* Ayet – gleiche Breite/Kantenabstände wie das Widget */
 body.admin-mode #ayet-container {
-    width: min(94vw, 1750px);
+    width: 100%;
     max-width: none;
     margin-top: auto !important;
     padding: 2vh 3vw 2.4vh 3vw;
 }
 
-body.admin-mode .ayet-label-box { font-size: 1.7vh; padding-bottom: 1vh; }
+body.admin-mode .ayet-label-box { font-size: 1.85vh; padding-bottom: 1vh; }
 
 body.admin-mode #ayet-text {
-    font-size: 2.6vh; /* Basisgröße; JS verkleinert bei Bedarf (fitAyetToScreen) */
+    font-size: 2.8vh; /* Basisgröße; JS verkleinert bei Bedarf (fitAyetToScreen) */
     line-height: 1.45;
     margin-top: 0.8vh;
 }
 
-body.admin-mode #ayet-quelle { font-size: 1.8vh; margin-top: 0.6vh; }
+body.admin-mode #ayet-quelle { font-size: 2.1vh; margin-top: 0.6vh; }
 
 /* Footer */
 body.admin-mode .footer {
@@ -647,8 +640,8 @@ body.admin-mode .footer {
     padding-bottom: 0;
 }
 
-body.admin-mode .footer-slogan { font-size: 2.6vh; }
-body.admin-mode .footer-copyright { font-size: 1.5vh; }
+body.admin-mode .footer-slogan { font-size: 2.835vh; }   /* etwas kleiner als das ATF-Logo (3.2vh) */
+body.admin-mode .footer-copyright { font-size: 1.6vh; } /* deutlich kleiner als das ATF-Logo */
 
 /* --------------------------------------------------------------------------
    10. RESPONSIVE (Handy & Tablet)

@@ -229,7 +229,7 @@ function fitAyetToScreen() {
     const ayet = document.getElementById('ayet-text');
     if (!container || !ayet) return;
 
-    let size = 2.6; // vh – Basisgröße, identisch zur CSS-Regel
+    let size = 2.8; // vh – Basisgröße, identisch zur CSS-Regel
     ayet.style.fontSize = size + 'vh';
 
     let guard = 0;
@@ -367,7 +367,7 @@ function renderTimes(times, cityAll) {
     }
 
     if (nextIdx !== -1) {
-        document.getElementById('next-vakit-name').innerText = vakitNamen[nextIdx] + " Vaktine";
+        document.getElementById('next-vakit-name').innerHTML = "<strong>" + vakitNamen[nextIdx] + "</strong> Vaktine";
         startCountdown(next);
     }
 }
