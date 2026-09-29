@@ -23,11 +23,16 @@ let currentCityId = null;   // ausgewählte Stadt-ID (String)
 let currentCityName = null; // Rohname (GROSSBUCHSTABEN) für Anzeige/Speicherung
 
 // Normalisiert für den Such-/Namensvergleich: Groß/Klein nach türkischer Regel,
-// UND großes İ/I werden gleichgesetzt. Ohne das findet z.B. "Istanbul" (mit
-// normalem lateinischem I) nicht die gespeicherte Stadt "İSTANBUL" (mit
-// türkischem İ) und umgekehrt – die meisten Tastaturen/Browser tippen kein İ.
-function foldTurkishI(str) {
-    return (str || '').toLocaleUpperCase('tr-TR').replace(/İ/g, 'I');
+// dann werden alle Akzent-/Umlaut-Zeichen entfernt (NFD-Zerlegung + Kombinationszeichen
+// strippen). Das gleicht zwei unabhängige Probleme in einem Schritt aus:
+// 1) Türkisches İ vs. normales lateinisches I ("Istanbul" soll "İSTANBUL" finden).
+// 2) ezan-app-main liefert deutsche Städtenamen ohne Umlaute ("KOLN" statt "KÖLN"),
+//    daher muss auch "Köln"/"Köngen" (so wie man es normal tippt) die gespeicherte
+//    umlautlose Schreibweise finden.
+// (İ zerlegt über NFD ebenfalls sauber in I + Punkt-Kombinationszeichen, daher reicht
+// diese eine Regel für beide Fälle.)
+function foldForSearch(str) {
+    return (str || '').toLocaleUpperCase('tr-TR').normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
 
 async function loadCountries() {
@@ -59,7 +64,7 @@ async function loadSearchIndex() {
         const res = await fetch(`${EZAN_BASE}locations/search_index.json`);
         searchIndex = await res.json();
         // Einmalig vorberechnen statt bei jedem Tastendruck neu zu normalisieren.
-        searchIndex.forEach(c => { c._searchName = foldTurkishI(c.name); });
+        searchIndex.forEach(c => { c._searchName = foldForSearch(c.name); });
     } catch (e) {
         console.error("Arama dizini yüklenemedi", e);
         searchIndex = [];
@@ -166,7 +171,7 @@ async function detectLocation() {
             const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=tr`);
             const data = await response.json();
 
-            const detectedCity = foldTurkishI(data.city || data.locality || "");
+            const detectedCity = foldForSearch(data.city || data.locality || "");
             const detectedCountryName = (data.countryName || "").toUpperCase();
             const country = countriesList.find(c => c.code.toUpperCase() === detectedCountryName);
 
@@ -221,7 +226,7 @@ function renderSearchResults(matches) {
 
 // Suchfunktion initialisieren
 document.getElementById('city-search-input').addEventListener('input', async function(e) {
-    const term = foldTurkishI(e.target.value);
+    const term = foldForSearch(e.target.value);
     const resultsDiv = document.getElementById('search-results');
 
     if (term.length < 2) {
@@ -264,14 +269,14 @@ const vakitNamen = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"
 // sind aber immer GROSS geschrieben, daher hier immer normalisieren.
 function getCityParam() {
     const c = urlParams.get('city');
-    return c ? foldTurkishI(c) : c;
+    return c ? foldForSearch(c) : c;
 }
 
 function formatCityName(name) {
     if (!name) return "";
     const lowerCaseWords = ["an", "der", "den", "dem", "am", "im", "bei", "und", "d.", "a.", "v."];
     let words = name.toLowerCase().split(' ');
-    return words.map((word, index) => {
+    const result = words.map((word, index) => {
         const cap = (w) => {
             if (w.includes('(')) return w.split('(').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('(');
             return w.charAt(0).toUpperCase() + w.slice(1);
@@ -279,6 +284,12 @@ function formatCityName(name) {
         if (word.includes('-')) return word.split('-').map(p => cap(p)).join('-');
         return (index === 0 || !lowerCaseWords.includes(word)) ? cap(word) : word;
     }).join(' ');
+    // (Nicht-lokalisiertes) toLowerCase()/toUpperCase() zerlegt das türkische İ in
+    // "I" + separates Punkt-Kombinationszeichen (Unicode-Standardverhalten). Als zwei
+    // Zeichen platzieren viele Schriftarten den Punkt falsch statt sauber über dem I –
+    // NFC setzt es wieder zu einem einzigen İ-Zeichen zusammen, das jede Schriftart
+    // korrekt wie ein normales Zeichen rendert.
+    return result.normalize('NFC');
 }
 
 function toggleWeekly() {
@@ -560,7 +571,7 @@ async function init() {
         const cities = await loadCitiesForState(stateId);
 
         if (urlCityName) {
-            const match = cities.find(c => foldTurkishI(c.name) === urlCityName);
+            const match = cities.find(c => foldForSearch(c.name) === urlCityName);
             if (match) {
                 currentCityId = String(match.id);
                 currentCityName = match.name;
