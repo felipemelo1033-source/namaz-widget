@@ -170,6 +170,7 @@ body {
 
 #city-search-input {
     flex: 1;
+    min-width: 0; /* erlaubt dem Feld zu schrumpfen, sonst verdrängt es den Button */
     border: none;
     padding: 0 16px;
     font-size: 17px;
@@ -181,10 +182,17 @@ body {
 }
 
 #location-btn {
+    flex-shrink: 0; /* Button (Icon bzw. "ARANIYOR..."-Text) bleibt immer vollstaendig sichtbar */
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
     background: var(--card);
     border: none;
     border-left: 1px solid var(--border);
     padding: 0 15px;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    color: var(--muted);
     cursor: pointer;
     transition: background 0.2s;
 }
