@@ -11,7 +11,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,800;1,400&family=Oregano&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,800;1,400&family=Norican&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,24 +30,11 @@
                 <div id="search-results"></div>
             </div>
 
-            <select id="state-select" onchange="updateCities()">
-                <option value="">Eyalet Seçin</option>
-                <option value="850">Baden-Württemberg</option>
-                <option value="851">Bayern</option>
-                <option value="852">Berlin</option>
-                <option value="853">Brandenburg</option>
-                <option value="854">Bremen</option>
-                <option value="855">Hamburg</option>
-                <option value="856">Hessen</option>
-                <option value="858">Mecklenburg-Vorpommern</option>
-                <option value="857">Niedersachsen</option>
-                <option value="859">Nordrhein-Westfalen</option>
-                <option value="860">Rheinland-Pfalz</option>
-                <option value="861">Saarland</option>
-                <option value="863">Sachsen</option>
-                <option value="864">Sachsen-Anhalt</option>
-                <option value="865">Schleswig-Holstein</option>
-                <option value="862">Thüringen</option>
+            <select id="country-select" onchange="handleCountryChange()">
+                <option value="">Ülke Seçin</option>
+            </select>
+            <select id="state-select" style="display:none" onchange="handleStateChange()">
+                <option value="">Eyalet/Bölge Seçin</option>
             </select>
             <select id="city-select" style="display:none" onchange="handleManualCityChange()"></select>
         </div>

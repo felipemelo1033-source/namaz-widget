@@ -1,20 +1,142 @@
 let interval;
-let masterIndex = null;
 
-// Lädt die Master-Datenbank
-async function loadMasterIndex() {
-    if (masterIndex) return; // Schon geladen
+// === Datenquelle: ezan-app-main (ATF Mobil Backend) ===
+// Live-Fetch statt lokaler JSON-Dateien: keine jährliche manuelle Aktualisierung
+// mehr nötig, und alle Länder der Welt sind automatisch verfügbar.
+const EZAN_BASE = 'https://raw.githubusercontent.com/felipemelo1033-source/ezan-app-main/main/data/';
+
+// ezan-app-main liefert Bundesland-Namen ohne Umlaute/Bindestriche
+// (z.B. "BADEN WURTTEMBERG" statt "Baden-Württemberg"). Für Deutschland
+// verwenden wir daher weiterhin die korrekt geschriebenen Namen (siehe Commit be9b75a).
+const GERMAN_STATE_NAMES = {
+    "850": "Baden-Württemberg", "851": "Bayern", "852": "Berlin",
+    "853": "Brandenburg", "854": "Bremen", "855": "Hamburg",
+    "856": "Hessen", "857": "Niedersachsen", "858": "Mecklenburg-Vorpommern",
+    "859": "Nordrhein-Westfalen", "860": "Rheinland-Pfalz", "861": "Saarland",
+    "862": "Thüringen", "863": "Sachsen", "864": "Sachsen-Anhalt",
+    "865": "Schleswig-Holstein"
+};
+
+let countriesList = null;   // [{id, code, name}]
+let searchIndex = null;     // [{id, name, country}] – weltweit
+let currentCityId = null;   // ausgewählte Stadt-ID (String)
+let currentCityName = null; // Rohname (GROSSBUCHSTABEN) für Anzeige/Speicherung
+
+async function loadCountries() {
+    if (countriesList) return;
     try {
-        const res = await fetch('./data/master_index.json');
-        masterIndex = await res.json();
+        const res = await fetch(`${EZAN_BASE}locations/countries.json`);
+        const countries = await res.json();
+        countriesList = countries;
+        const select = document.getElementById('country-select');
+        select.innerHTML = '<option value="">Ülke Seçin</option>';
+        countries
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+            .forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.textContent = formatCityName(c.name);
+                select.appendChild(opt);
+            });
     } catch (e) {
-        console.error("Master Index yüklenemedi");
+        console.error("Ülke listesi yüklenemedi", e);
+        countriesList = [];
     }
+}
+
+async function loadSearchIndex() {
+    if (searchIndex) return;
+    try {
+        const res = await fetch(`${EZAN_BASE}locations/search_index.json`);
+        searchIndex = await res.json();
+    } catch (e) {
+        console.error("Arama dizini yüklenemedi", e);
+        searchIndex = [];
+    }
+}
+
+async function loadStatesForCountry(countryId, savedStateId = null) {
+    const stateSelect = document.getElementById('state-select');
+    try {
+        const res = await fetch(`${EZAN_BASE}locations/states_${countryId}.json`);
+        const states = await res.json();
+        stateSelect.innerHTML = '<option value="">Eyalet/Bölge Seçin</option>';
+        states
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+            .forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.textContent = formatCityName(GERMAN_STATE_NAMES[s.id] || s.name);
+                if (savedStateId && String(savedStateId) === String(s.id)) opt.selected = true;
+                stateSelect.appendChild(opt);
+            });
+        stateSelect.style.display = 'inline-block';
+    } catch (e) {
+        console.error("Eyalet listesi yüklenemedi", e);
+    }
+}
+
+async function loadCitiesForState(stateId, savedCityId = null) {
+    const citySelect = document.getElementById('city-select');
+    try {
+        const res = await fetch(`${EZAN_BASE}locations/cities_${stateId}.json`);
+        const cities = await res.json();
+        citySelect.innerHTML = '<option value="">Şehir Seçin</option>';
+        cities
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+            .forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.textContent = formatCityName(c.name);
+                opt.dataset.rawname = c.name;
+                if (savedCityId && String(savedCityId) === String(c.id)) opt.selected = true;
+                citySelect.appendChild(opt);
+            });
+        citySelect.style.display = 'inline-block';
+        return cities;
+    } catch (e) {
+        console.error("Şehir listesi yüklenemedi", e);
+        return [];
+    }
+}
+
+async function handleCountryChange() {
+    const countryId = document.getElementById('country-select').value;
+    document.getElementById('state-select').innerHTML = '<option value="">Eyalet/Bölge Seçin</option>';
+    document.getElementById('state-select').style.display = 'none';
+    document.getElementById('city-select').innerHTML = '';
+    document.getElementById('city-select').style.display = 'none';
+    if (!countryId) return;
+    await loadStatesForCountry(countryId);
+}
+
+async function handleStateChange() {
+    const stateId = document.getElementById('state-select').value;
+    document.getElementById('city-select').innerHTML = '';
+    document.getElementById('city-select').style.display = 'none';
+    if (!stateId) return;
+    await loadCitiesForState(stateId);
+}
+
+function handleManualCityChange() {
+    const citySelect = document.getElementById('city-select');
+    const opt = citySelect.options[citySelect.selectedIndex];
+    if (!opt || !citySelect.value) return;
+    currentCityId = citySelect.value;
+    currentCityName = opt.dataset.rawname;
+    urlParams.delete('city');
+    urlParams.delete('state');
+    urlParams.delete('country');
+    update();
 }
 
 // Die Hauptfunktion für den Standort
 async function detectLocation() {
-    await loadMasterIndex();
+    await loadCountries();
+    await loadSearchIndex();
     const btn = document.getElementById('location-btn');
     const originalText = btn.innerText;
     btn.innerText = "⌛ ARANIYOR...";
@@ -33,24 +155,29 @@ async function detectLocation() {
             // Reverse Geocoding API
             const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=tr`);
             const data = await response.json();
-            
-            // Stadtname in Großbuchstaben (Türkisch-kompatibel)
-            const detectedCity = (data.city || data.locality || "").toUpperCase('tr-TR');
 
-            if (masterIndex && masterIndex[detectedCity]) {
-                const stateId = masterIndex[detectedCity];
+            const detectedCity = (data.city || data.locality || "").toLocaleUpperCase('tr-TR');
+            const detectedCountryName = (data.countryName || "").toUpperCase();
+            const country = countriesList.find(c => c.code.toUpperCase() === detectedCountryName);
 
-                // 1. Eyalet seç
-                document.getElementById('state-select').value = stateId;
+            const cityMatch = (country && searchIndex.find(c => String(c.country) === String(country.id) && c.name === detectedCity))
+                || searchIndex.find(c => c.name === detectedCity);
 
-                // 2. Şehirleri yükle (Senin fonksiyonun)
-                // Wir übergeben detectedCity, damit updateCities es direkt selektiert
-                await updateCities(detectedCity);
+            if (cityMatch) {
+                currentCityId = String(cityMatch.id);
+                currentCityName = cityMatch.name;
 
-                // 3. Vakitleri güncelle (Senin fonksiyonun)
+                if (country) {
+                    document.getElementById('country-select').value = country.id;
+                    await loadStatesForCountry(country.id);
+                }
+                document.getElementById('state-select').value = '';
+                document.getElementById('city-select').innerHTML = '';
+                document.getElementById('city-select').style.display = 'none';
+                document.getElementById('city-search-input').value = formatCityName(cityMatch.name);
+
                 update();
-
-                alert("Konum belirlendi: " + formatCityName(detectedCity));
+                alert("Konum belirlendi: " + formatCityName(cityMatch.name));
             } else {
                 alert("Şehir bulunamadı: " + detectedCity);
             }
@@ -64,48 +191,57 @@ async function detectLocation() {
     });
 }
 
+function renderSearchResults(matches) {
+    const resultsDiv = document.getElementById('search-results');
+    resultsDiv.innerHTML = '';
+    matches.forEach(m => {
+        const item = document.createElement('div');
+        item.className = 'search-result-item';
+        item.style.cssText = 'padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; text-align: left;';
+        item.textContent = formatCityName(m.name);
+        item.addEventListener('click', () => selectCityFromSearch(m.id, m.name, m.country));
+        resultsDiv.appendChild(item);
+    });
+    resultsDiv.style.display = matches.length ? 'block' : 'none';
+}
+
 // Suchfunktion initialisieren
 document.getElementById('city-search-input').addEventListener('input', async function(e) {
-    const term = e.target.value.toUpperCase('tr-TR');
+    const term = e.target.value.toLocaleUpperCase('tr-TR');
     const resultsDiv = document.getElementById('search-results');
-    
+
     if (term.length < 2) {
         resultsDiv.style.display = 'none';
         return;
     }
 
-    await loadMasterIndex(); // Sicherstellen, dass Index da ist
-    
-    const matches = Object.keys(masterIndex).filter(city => city.includes(term)).slice(0, 10);
-    
-    if (matches.length > 0) {
-        resultsDiv.innerHTML = matches.map(city => `
-            <div onclick="selectCityFromSearch('${city}')" 
-                style="padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; text-align: left;">
-                ${formatCityName(city)}
-            </div>
-        `).join('');
-        resultsDiv.style.display = 'block';
-    } else {
-        resultsDiv.style.display = 'none';
-    }
+    await loadSearchIndex(); // Sicherstellen, dass der weltweite Index da ist
+
+    const matches = searchIndex.filter(c => c.name.includes(term)).slice(0, 10);
+    renderSearchResults(matches);
 });
 
 // Funktion, wenn eine Stadt aus der Suche angeklickt wird
-async function selectCityFromSearch(cityName) {
-    const stateId = masterIndex[cityName];
-    
-    // UI Update
-    document.getElementById('state-select').value = stateId;
+async function selectCityFromSearch(cityId, cityName, countryId) {
+    currentCityId = String(cityId);
+    currentCityName = cityName;
+
     document.getElementById('city-search-input').value = formatCityName(cityName);
     document.getElementById('search-results').style.display = 'none';
 
-    // Deine Funktionen aufrufen
-    await updateCities(cityName);
+    // Land-Dropdown zur Orientierung mitziehen; Eyalet/Stadt bleiben frei wählbar,
+    // da die Suche die Stadt direkt per ID findet (ohne den Umweg über ein Bundesland).
+    if (countryId) {
+        document.getElementById('country-select').value = String(countryId);
+        await loadStatesForCountry(countryId);
+    }
+    document.getElementById('state-select').value = '';
+    document.getElementById('city-select').innerHTML = '';
+    document.getElementById('city-select').style.display = 'none';
+
     update();
 }
 
-let currentStateIndex = {};
 const urlParams = new URLSearchParams(window.location.search);
 const vakitNamen = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
 
@@ -114,7 +250,7 @@ const vakitNamen = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"
 // sind aber immer GROSS geschrieben, daher hier immer normalisieren.
 function getCityParam() {
     const c = urlParams.get('city');
-    return c ? c.toUpperCase('tr-TR') : c;
+    return c ? c.toLocaleUpperCase('tr-TR') : c;
 }
 
 function formatCityName(name) {
@@ -129,29 +265,6 @@ function formatCityName(name) {
         if (word.includes('-')) return word.split('-').map(p => cap(p)).join('-');
         return (index === 0 || !lowerCaseWords.includes(word)) ? cap(word) : word;
     }).join(' ');
-}
-
-async function updateCities(savedCityId = null) {
-    const stateId = document.getElementById('state-select').value;
-    const citySelect = document.getElementById('city-select');
-    if (!stateId) { citySelect.style.display = 'none'; return; }
-    try {
-        const res = await fetch(`./data/${stateId}/index.json`);
-        currentStateIndex = await res.json();
-        citySelect.innerHTML = '<option value="">Şehir Seçin</option>';
-        Object.keys(currentStateIndex).sort().forEach(c => {
-            let opt = document.createElement('option');
-            opt.value = c; opt.text = formatCityName(c);
-            if(savedCityId === c) opt.selected = true;
-            citySelect.appendChild(opt);
-        });
-
-        if (savedCityId) {
-            citySelect.value = savedCityId;
-        }
-
-        citySelect.style.display = 'inline-block';
-    } catch (e) {}
 }
 
 function toggleWeekly() {
@@ -186,17 +299,17 @@ function renderWeekly(cityData, cityName) {
 
 function updateCurrentDate() {
     const jetzt = new Date();
-    
+
     // Datumsteil (z.B. 27 Ocak 2026)
-    const datePart = jetzt.toLocaleDateString('tr-TR', { 
-        day: 'numeric', 
-        month: 'long', 
-        year: 'numeric' 
+    const datePart = jetzt.toLocaleDateString('tr-TR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
     });
-    
+
     // Wochentag (z.B. Salı)
-    const dayPart = jetzt.toLocaleDateString('tr-TR', { 
-        weekday: 'long' 
+    const dayPart = jetzt.toLocaleDateString('tr-TR', {
+        weekday: 'long'
     });
 
     // Zusammenfügen im gewünschten Format
@@ -252,29 +365,25 @@ function fitAyetToScreen() {
 window.addEventListener('resize', () => requestAnimationFrame(fitAyetToScreen));
 
 async function update() {
-    const stateSelect = document.getElementById('state-select');
-    const citySelect = document.getElementById('city-select');
-    const stateId = stateSelect.value;
-    const city = getCityParam() || citySelect.value;
     const ayetCont = document.getElementById('ayet-container');
-    
-if (urlParams.has('admin')) {
-    // Blendet die Dropdown-Menüs aus
-    if(document.getElementById('picker-area')) {
-        document.getElementById('picker-area').style.display = 'none';
+
+    if (urlParams.has('admin')) {
+        // Blendet die Dropdown-Menüs aus
+        if (document.getElementById('picker-area')) {
+            document.getElementById('picker-area').style.display = 'none';
+        }
+        // Blendet das neue Suchfeld aus
+        if (document.querySelector('.search-wrapper')) {
+            document.querySelector('.search-wrapper').style.display = 'none';
+        }
     }
-    // Blendet das neue Suchfeld aus
-    if(document.querySelector('.search-wrapper')) {
-        document.querySelector('.search-wrapper').style.display = 'none';
-    }
-}        
 
     // Ayet laden
     try {
         const aRes = await fetch(`./data/ayetler.json?v=${Date.now()}`);
         const aData = await aRes.json();
         const dKey = new Date().toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'});
-        
+
         if (aData[dKey]) {
             document.getElementById('ayet-text').innerText = aData[dKey].text;
             document.getElementById('ayet-quelle').innerText = aData[dKey].quelle;
@@ -288,25 +397,38 @@ if (urlParams.has('admin')) {
         ayetCont.style.display = 'none';
     }
 
-    // LocalStorage Speicherung
-    if (!urlParams.get('city') && city && stateId) {
-        localStorage.setItem('userCity', city);
-        localStorage.setItem('userState', stateId);
+    if (!currentCityId) return;
+
+    // LocalStorage Speicherung (nicht bei fest vorgegebener TV-URL)
+    if (!urlParams.get('city')) {
+        localStorage.setItem('userCityId', currentCityId);
+        localStorage.setItem('userCityName', currentCityName || '');
+        // Immer mitspeichern (auch leer), damit z.B. nach einer Suche kein
+        // verwaistes altes Bundesland übrig bleibt, das nicht mehr zur Stadt passt.
+        localStorage.setItem('userCountryId', document.getElementById('country-select').value || '');
+        localStorage.setItem('userStateId', document.getElementById('state-select').value || '');
     }
 
-    if (!city || !stateId || !currentStateIndex[city]) return;
-
     document.getElementById('main-widget').style.opacity = "1";
-    document.getElementById('city-title').innerText = formatCityName(city);
+    document.getElementById('city-title').innerText = formatCityName(currentCityName || '');
 
     try {
-        const res = await fetch(`./data/${stateId}/${currentStateIndex[city]}`);
-        const data = await res.json();
+        const res = await fetch(`${EZAN_BASE}vakitler/${currentCityId}.json`);
+        const json = await res.json();
+        const days = (json && json.data) || [];
+        const cityAll = {};
+        days.forEach(d => {
+            cityAll[d.gregorianDateShort] = {
+                hicri: d.hijriDateLong,
+                vakitler: [d.fajr, d.sunrise, d.dhuhr, d.asr, d.maghrib, d.isha]
+            };
+        });
+
         const dKey = new Date().toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'});
-        if (data[city] && data[city][dKey]) {
-            document.getElementById('hicri-tarih').innerText = data[city][dKey].hicri;
-            renderTimes(data[city][dKey].vakitler, data[city]);
-            renderWeekly(data[city], city);
+        if (cityAll[dKey]) {
+            document.getElementById('hicri-tarih').innerText = cityAll[dKey].hicri;
+            renderTimes(cityAll[dKey].vakitler, cityAll);
+            renderWeekly(cityAll, currentCityName);
         }
     } catch(e) {
         console.error("Vakitler yüklenemedi:", e);
@@ -316,7 +438,7 @@ if (urlParams.has('admin')) {
 function renderTimes(times, cityAll) {
     let currentIdx = -1;
     const now = new Date();
-    
+
     // 1. Alle Zeiten auf die Boxen schreiben
     times.forEach((t, i) => {
         document.getElementById('t-' + i).innerText = t;
@@ -333,7 +455,7 @@ function renderTimes(times, cityAll) {
 
         if (now >= pDate) {
             currentIdx = i;
-            break; 
+            break;
         }
     }
 
@@ -350,7 +472,7 @@ function renderTimes(times, cityAll) {
     // 4. Countdown für die NÄCHSTE Zeit berechnen (Logik bleibt für den Timer gleich)
     let next = null;
     let nextIdx = -1;
-    
+
     times.forEach((t, i) => {
         const [h, m] = t.split(':').map(Number);
         const pDate = new Date(now);
@@ -391,27 +513,62 @@ function startCountdown(target) {
     }, 1000);
 }
 
-function handleManualCityChange() { urlParams.delete('city'); update(); }
-
 // Initialer Start beim Laden der Seite
 async function init() {
-    const sCity = getCityParam() || localStorage.getItem('userCity');
-    const sState = urlParams.get('state') || localStorage.getItem('userState');
-    
-    if (sState) {
-        document.getElementById('state-select').value = sState;
-        // Warten, bis die Städte für dieses Bundesland geladen sind
-        await updateCities(sCity); 
-        // Dann die Zeiten anzeigen
-        update();
-    } else {
-        update();
+    await loadCountries();
+
+    const urlCountry = urlParams.get('country');
+    const urlState = urlParams.get('state');
+    const urlCityName = getCityParam(); // aus ?city=... (alte TV-URLs, ohne Land)
+
+    const savedCountry = localStorage.getItem('userCountryId');
+    const savedState = localStorage.getItem('userStateId');
+    const savedCityId = localStorage.getItem('userCityId');
+    const savedCityName = localStorage.getItem('userCityName');
+
+    // Alte TV-URLs (?admin&city=...&state=...) hatten kein "country" – das waren
+    // immer deutsche Bundesland-IDs (850-865), daher hier Deutschland annehmen.
+    let countryId = urlCountry || (urlState ? '13' : null) || savedCountry;
+    let stateId = urlState || savedState;
+
+    if (!countryId && !stateId && !savedCityId) {
+        // Erststart ohne gespeicherte Auswahl: Deutschland als Standard vorauswählen
+        countryId = '13';
     }
-	
-	// In der init() oder update() Funktion ergänzen:
-	if (urlParams.has('admin')) {
-		document.body.classList.add('admin-mode');
-	}
+
+    if (countryId) {
+        document.getElementById('country-select').value = countryId;
+        await loadStatesForCountry(countryId, stateId);
+    }
+
+    if (stateId) {
+        document.getElementById('state-select').value = stateId;
+        const cities = await loadCitiesForState(stateId);
+
+        if (urlCityName) {
+            const match = cities.find(c => c.name.toLocaleUpperCase('tr-TR') === urlCityName);
+            if (match) {
+                currentCityId = String(match.id);
+                currentCityName = match.name;
+                document.getElementById('city-select').value = match.id;
+            }
+        } else if (savedCityId && cities.some(c => String(c.id) === String(savedCityId))) {
+            currentCityId = savedCityId;
+            currentCityName = savedCityName;
+            document.getElementById('city-select').value = savedCityId;
+        }
+    } else if (savedCityId && savedCityName) {
+        // Stadt aus vorheriger Sitzung ohne gespeichertes Bundesland (z.B. per Suche gewählt)
+        currentCityId = savedCityId;
+        currentCityName = savedCityName;
+        document.getElementById('city-search-input').value = formatCityName(savedCityName);
+    }
+
+    update();
+
+    if (urlParams.has('admin')) {
+        document.body.classList.add('admin-mode');
+    }
 }
 
 // Liste schließen, wenn man außerhalb klickt
