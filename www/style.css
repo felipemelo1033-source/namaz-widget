@@ -93,7 +93,7 @@ body {
 }
 
 .title-city {
-    font-family: 'Norican', cursive;
+    font-family: 'Grand Hotel', cursive;
     font-weight: 400;
     color: var(--text);
     font-size: clamp(40px, 7vw, 90px);
@@ -259,6 +259,17 @@ body {
         width: 100% !important;
         max-width: 360px !important;
         margin: 5px auto !important;
+    }
+}
+
+/* Desktop: alle vier Felder (Suche + 3 Dropdowns) in einer Zeile */
+@media (min-width: 900px) {
+    .selector-row { flex-wrap: nowrap; }
+    .search-wrapper,
+    #country-select,
+    #state-select,
+    #city-select {
+        width: 220px !important;
     }
 }
 

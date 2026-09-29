@@ -18,9 +18,17 @@ const GERMAN_STATE_NAMES = {
 };
 
 let countriesList = null;   // [{id, code, name}]
-let searchIndex = null;     // [{id, name, country}] – weltweit
+let searchIndex = null;     // [{id, name, country, _searchName}] – weltweit
 let currentCityId = null;   // ausgewählte Stadt-ID (String)
 let currentCityName = null; // Rohname (GROSSBUCHSTABEN) für Anzeige/Speicherung
+
+// Normalisiert für den Such-/Namensvergleich: Groß/Klein nach türkischer Regel,
+// UND großes İ/I werden gleichgesetzt. Ohne das findet z.B. "Istanbul" (mit
+// normalem lateinischem I) nicht die gespeicherte Stadt "İSTANBUL" (mit
+// türkischem İ) und umgekehrt – die meisten Tastaturen/Browser tippen kein İ.
+function foldTurkishI(str) {
+    return (str || '').toLocaleUpperCase('tr-TR').replace(/İ/g, 'I');
+}
 
 async function loadCountries() {
     if (countriesList) return;
@@ -50,6 +58,8 @@ async function loadSearchIndex() {
     try {
         const res = await fetch(`${EZAN_BASE}locations/search_index.json`);
         searchIndex = await res.json();
+        // Einmalig vorberechnen statt bei jedem Tastendruck neu zu normalisieren.
+        searchIndex.forEach(c => { c._searchName = foldTurkishI(c.name); });
     } catch (e) {
         console.error("Arama dizini yüklenemedi", e);
         searchIndex = [];
@@ -156,12 +166,12 @@ async function detectLocation() {
             const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=tr`);
             const data = await response.json();
 
-            const detectedCity = (data.city || data.locality || "").toLocaleUpperCase('tr-TR');
+            const detectedCity = foldTurkishI(data.city || data.locality || "");
             const detectedCountryName = (data.countryName || "").toUpperCase();
             const country = countriesList.find(c => c.code.toUpperCase() === detectedCountryName);
 
-            const cityMatch = (country && searchIndex.find(c => String(c.country) === String(country.id) && c.name === detectedCity))
-                || searchIndex.find(c => c.name === detectedCity);
+            const cityMatch = (country && searchIndex.find(c => String(c.country) === String(country.id) && c._searchName === detectedCity))
+                || searchIndex.find(c => c._searchName === detectedCity);
 
             if (cityMatch) {
                 currentCityId = String(cityMatch.id);
@@ -176,7 +186,11 @@ async function detectLocation() {
                 document.getElementById('city-select').style.display = 'none';
                 document.getElementById('city-search-input').value = formatCityName(cityMatch.name);
 
-                update();
+                // Erst die Anzeige fertig aktualisieren, DANACH die blockierende
+                // Bestätigung zeigen — alert() pausiert die JS-Ausführung, sonst
+                // bliebe update() (Vakit-Fetch, Titel) bis zum Wegklicken haengen
+                // und es sah so aus, als waere gar nichts passiert.
+                await update();
                 alert("Konum belirlendi: " + formatCityName(cityMatch.name));
             } else {
                 alert("Şehir bulunamadı: " + detectedCity);
@@ -207,7 +221,7 @@ function renderSearchResults(matches) {
 
 // Suchfunktion initialisieren
 document.getElementById('city-search-input').addEventListener('input', async function(e) {
-    const term = e.target.value.toLocaleUpperCase('tr-TR');
+    const term = foldTurkishI(e.target.value);
     const resultsDiv = document.getElementById('search-results');
 
     if (term.length < 2) {
@@ -217,7 +231,7 @@ document.getElementById('city-search-input').addEventListener('input', async fun
 
     await loadSearchIndex(); // Sicherstellen, dass der weltweite Index da ist
 
-    const matches = searchIndex.filter(c => c.name.includes(term)).slice(0, 10);
+    const matches = searchIndex.filter(c => c._searchName.includes(term)).slice(0, 10);
     renderSearchResults(matches);
 });
 
@@ -250,7 +264,7 @@ const vakitNamen = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"
 // sind aber immer GROSS geschrieben, daher hier immer normalisieren.
 function getCityParam() {
     const c = urlParams.get('city');
-    return c ? c.toLocaleUpperCase('tr-TR') : c;
+    return c ? foldTurkishI(c) : c;
 }
 
 function formatCityName(name) {
@@ -546,7 +560,7 @@ async function init() {
         const cities = await loadCitiesForState(stateId);
 
         if (urlCityName) {
-            const match = cities.find(c => c.name.toLocaleUpperCase('tr-TR') === urlCityName);
+            const match = cities.find(c => foldTurkishI(c.name) === urlCityName);
             if (match) {
                 currentCityId = String(match.id);
                 currentCityName = match.name;
