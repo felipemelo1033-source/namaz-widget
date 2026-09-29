@@ -83,10 +83,10 @@ body {
 
 .title-red {
     color: var(--red);
-    font-size: clamp(14px, 2vw, 19px);
+    font-size: clamp(14px, 4.5vw, 28px); /* an Höhe des ATF-Logos (.logo-top) angeglichen */
     font-weight: 800;
-    letter-spacing: 0.42em;
-    text-indent: 0.42em; /* gleicht das Letter-Spacing des letzten Zeichens aus */
+    letter-spacing: 0.16em;
+    text-indent: 0.16em; /* gleicht das Letter-Spacing des letzten Zeichens aus */
     margin: 16px 0 4px 0;
     text-transform: uppercase;
     text-align: center;
@@ -144,9 +144,9 @@ body {
    5. SUCHE & STADT-AUSWAHL
    -------------------------------------------------------------------------- */
 .search-wrapper {
-    width: 100% !important;
-    max-width: 360px !important;
-    margin: 6px auto !important;
+    width: 260px;
+    max-width: 90vw;
+    margin: 5px 0;
     position: relative;
     z-index: 9999;
 }
@@ -210,13 +210,14 @@ body {
 
 #search-results > div:hover { background: var(--card); }
 
-/* Dropdowns: nebeneinander auf breiten Bildschirmen, untereinander auf schmalen */
-.city-picker {
+/* Suche + Dropdowns: alle drei in einer Zeile auf breiten Bildschirmen,
+   untereinander gestapelt auf schmalen (Mobile) */
+.selector-row {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 0 10px;
     width: 100%;
     position: relative;
@@ -241,7 +242,8 @@ body {
 }
 
 @media (max-width: 640px) {
-    .city-picker { flex-direction: column; gap: 0; }
+    .selector-row { flex-direction: column; align-items: center; gap: 0; }
+    .search-wrapper { width: 100%; max-width: 360px; margin: 5px 0; }
     #state-select,
     #city-select {
         width: 100% !important;
@@ -427,6 +429,22 @@ body {
 #weekly-toggle-text:hover { color: var(--text); background-color: var(--card); }
 #weekly-toggle-text:active { transform: scale(0.98); }
 
+.weekly-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.weekly-icon {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    color: var(--red);
+}
+
 /* --------------------------------------------------------------------------
    8. AYET & FOOTER
    -------------------------------------------------------------------------- */
@@ -506,7 +524,7 @@ body.admin-mode .container {
 
 /* Auswahl-Elemente sicher ausblenden (JS blendet ebenfalls aus) */
 body.admin-mode .search-wrapper,
-body.admin-mode .city-picker,
+body.admin-mode .selector-row,
 body.admin-mode #weekly-container { display: none !important; }
 
 /* Logo wandert in den Footer */

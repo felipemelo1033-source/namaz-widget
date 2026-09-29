@@ -156,14 +156,14 @@ async function updateCities(savedCityId = null) {
 
 function toggleWeekly() {
     const el = document.getElementById('weekly-table-wrapper');
-    const label = document.getElementById('weekly-toggle-text');
-    
+    const label = document.getElementById('weekly-toggle-label');
+
     if (el.style.display === 'none') {
         el.style.display = 'block';
-        label.innerText = "📅 7 GÜNLÜK VAKİTLERİ GİZLE";
+        label.innerText = "7 GÜNLÜK VAKİTLERİ GİZLE";
     } else {
         el.style.display = 'none';
-        label.innerText = "📅 7 GÜNLÜK VAKİTLERİ GÖSTER";
+        label.innerText = "7 GÜNLÜK VAKİTLERİ GÖSTER";
     }
 }
 

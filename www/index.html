@@ -19,17 +19,17 @@
         <img src="logo_oben.svg" class="logo-top" alt="ATF Logo">
         <h1 class="title-red">Namaz Vakitleri</h1>
 
-        <div class="search-wrapper">
-            <div class="input-group">
-                <input type="text" id="city-search-input" placeholder="Şehir ara..." autocomplete="off">
-                <button id="location-btn" onclick="detectLocation()" title="Konumumu Bul">
-                    <span style="font-size: 20px;">📍</span>
-                </button>
+        <div class="selector-row" id="picker-area">
+            <div class="search-wrapper">
+                <div class="input-group">
+                    <input type="text" id="city-search-input" placeholder="Şehir ara..." autocomplete="off">
+                    <button id="location-btn" onclick="detectLocation()" title="Konumumu Bul">
+                        <span style="font-size: 20px;">📍</span>
+                    </button>
+                </div>
+                <div id="search-results"></div>
             </div>
-            <div id="search-results"></div>
-        </div>
 
-        <div class="city-picker" id="picker-area">
             <select id="state-select" onchange="updateCities()">
                 <option value="">Eyalet Seçin</option>
                 <option value="850">Baden-Württemberg</option>
@@ -86,8 +86,19 @@
         </div>
 
         <div id="weekly-container" class="custom-widget" style="display:none; margin-top:20px; margin-bottom:20px;">
-            <div class="ayet-label-box" id="weekly-toggle-text" style="cursor:pointer; padding: 10px; border-radius: 10px;" onclick="toggleWeekly()">
-                📅 7 GÜNLÜK VAKİTLERİ GÖSTER
+            <div class="ayet-label-box weekly-toggle" id="weekly-toggle-text" onclick="toggleWeekly()">
+                <svg class="weekly-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect x="3.5" y="5.5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M3.5 9.75H20.5" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M8 3.25V6.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    <path d="M16 3.25V6.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="8" cy="13.25" r="1" fill="currentColor"/>
+                    <circle cx="12" cy="13.25" r="1" fill="currentColor"/>
+                    <circle cx="16" cy="13.25" r="1" fill="currentColor"/>
+                    <circle cx="8" cy="16.75" r="1" fill="currentColor"/>
+                    <circle cx="12" cy="16.75" r="1" fill="currentColor"/>
+                </svg>
+                <span id="weekly-toggle-label">7 GÜNLÜK VAKİTLERİ GÖSTER</span>
             </div>
 
             <div id="weekly-table-wrapper" style="display:none; overflow-x:auto;">
