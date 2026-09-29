@@ -109,6 +109,14 @@ let currentStateIndex = {};
 const urlParams = new URLSearchParams(window.location.search);
 const vakitNamen = ["İmsak", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"];
 
+// Manche Browser/Adressleisten schreiben Teile der URL beim Autovervollständigen
+// klein (z.B. "nagold" statt "NAGOLD"). Die Staedtenamen in den Datendateien
+// sind aber immer GROSS geschrieben, daher hier immer normalisieren.
+function getCityParam() {
+    const c = urlParams.get('city');
+    return c ? c.toUpperCase('tr-TR') : c;
+}
+
 function formatCityName(name) {
     if (!name) return "";
     const lowerCaseWords = ["an", "der", "den", "dem", "am", "im", "bei", "und", "d.", "a.", "v."];
@@ -247,7 +255,7 @@ async function update() {
     const stateSelect = document.getElementById('state-select');
     const citySelect = document.getElementById('city-select');
     const stateId = stateSelect.value;
-    const city = urlParams.get('city') || citySelect.value;
+    const city = getCityParam() || citySelect.value;
     const ayetCont = document.getElementById('ayet-container');
     
 if (urlParams.has('admin')) {
@@ -387,7 +395,7 @@ function handleManualCityChange() { urlParams.delete('city'); update(); }
 
 // Initialer Start beim Laden der Seite
 async function init() {
-    const sCity = urlParams.get('city') || localStorage.getItem('userCity');
+    const sCity = getCityParam() || localStorage.getItem('userCity');
     const sState = urlParams.get('state') || localStorage.getItem('userState');
     
     if (sState) {
