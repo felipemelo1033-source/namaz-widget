@@ -75,7 +75,7 @@ body {
    3. LOGO & TITEL
    -------------------------------------------------------------------------- */
 .logo-top {
-    width: 420px;
+    width: 391px; /* Höhe ≈ 34px, exakt an .title-red angeglichen */
     max-width: 60%;
     height: auto;
     margin-top: 4px;
@@ -87,7 +87,7 @@ body {
     font-weight: 800;
     letter-spacing: 0.16em;
     text-indent: 0.16em; /* gleicht das Letter-Spacing des letzten Zeichens aus */
-    margin: 16px 0 4px 0;
+    margin: 16px 0 22px 0; /* mehr Abstand zu Suche/Dropdowns darunter */
     text-transform: uppercase;
     text-align: center;
 }
